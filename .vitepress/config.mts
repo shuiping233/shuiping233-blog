@@ -1,24 +1,28 @@
-import { defineConfig } from "vitepress";
+import { defineConfig, ScaffoldThemeType } from "vitepress";
+import { withSidebar } from "vitepress-sidebar";
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
-  srcDir: "posts",
+const vitePressConfigs = {
+  srcDir: "docs",
   lang: "zh-CN",
 
   title: "shuiping233 blog",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "主页", link: "/" },
+      { text: "主页", link: "/index" },
       { text: "友情链接", link: "/friend-links" },
     ],
 
-    sidebar: [
-      {
-        text: "主页",
-        items: [{ text: "主页", link: "/index" }],
+    sidebar: {
+      "/": {
+        base: "/",
+        items: [
+          { text: "主页", link: "/" },
+          { text: "友情链接", link: "/friend-links" },
+        ],
       },
-    ],
+    },
 
     socialLinks: [
       { icon: "github", link: "https://github.com/shuiping233" },
@@ -28,4 +32,17 @@ export default defineConfig({
       },
     ],
   },
-});
+};
+
+export default defineConfig(
+  withSidebar(vitePressConfigs, [
+    {
+      documentRootPath: "docs",
+      // scanStartPath: "posts",
+      // basePath: "/posts/",
+      // resolvePath: "/posts/",
+      useTitleFromFileHeading: true,
+      collapsed: false,
+    },
+  ]),
+);

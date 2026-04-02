@@ -1,6 +1,7 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 # layout: home
+title: shuiping233的博客
 ---
 
 # shuiping233的博客

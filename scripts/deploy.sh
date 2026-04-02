@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# /usr/local/sbin/update_blog.sh
+
 set -xeuo pipefail
 
-TEMP_DIR="/tmp/shuiping233-blog/dist"
+TEMP_DIR="/tmp/shuiping233-blog"
 BACKUP_DIR="/var/www/html/shuiping233-blog.bak"
 TARGET_DIR="/var/www/html/shuiping233-blog"
 

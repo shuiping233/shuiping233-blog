@@ -1,0 +1,4 @@
+/* 强制显示 footer，即使侧边栏存在 */
+footer.VPFooter {
+  display: block !important;
+}

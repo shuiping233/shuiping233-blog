@@ -5,7 +5,7 @@
   },
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
+    "build": "vitepress build --outDir ./dist",
     "preview": "vitepress preview"
   }
 }

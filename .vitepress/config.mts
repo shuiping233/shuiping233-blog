@@ -1,13 +1,26 @@
-import { defineConfig } from "vitepress";
+import { defineConfig, HeadConfig } from "vitepress";
 import { withSidebar } from "vitepress-sidebar";
+
+const head: HeadConfig[] = [
+  [
+    "link",
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      href: "vitepress-logo-mini.svg",
+    },
+  ],
+];
 
 // https://vitepress.dev/reference/site-config
 const vitePressConfigs = {
   srcDir: "docs",
   lang: "zh-CN",
   title: "shuiping233 Blog",
+  head: head,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+
     nav: [
       { text: "主页", link: "/" },
       { text: "友情链接", link: "/friend-links" },

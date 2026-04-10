@@ -30,7 +30,7 @@ const vitePressConfigs = {
       message:
         "本网站内容除非特别声明，采用 <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'>CC BY-NC-SA 4.0</a> 协议进行许可",
       copyright:
-        '<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备XXXXXXXX号-1</a>',
+        '<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2026039817号</a>',
     },
 
     sidebar: {

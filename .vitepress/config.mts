@@ -1,4 +1,5 @@
 import { defineConfig, HeadConfig } from "vitepress";
+import compression from "vite-plugin-compression";
 import { withSidebar } from "vitepress-sidebar";
 
 const head: HeadConfig[] = [
@@ -49,6 +50,36 @@ const vitePressConfigs = {
         icon: "bilibili",
         link: "https://space.bilibili.com/37212498",
       },
+    ],
+  },
+  vite: {
+    plugins: [
+      // Gzip 压缩
+      compression({
+        verbose: true,
+        disable: false,
+        threshold: -1,
+        filter: () => true,
+        algorithm: "gzip",
+        ext: ".gz",
+        compressionOptions: {
+          level: 9, // Gzip 范围是 1-9
+        },
+      }),
+      // Brotli 压缩
+      compression({
+        verbose: true,
+        disable: false,
+        threshold: -1,
+        filter: () => true,
+        algorithm: "brotliCompress",
+        ext: ".br",
+        compressionOptions: {
+          // Brotli 范围是 0-11
+          // 注意：级别 11 压缩速度极慢，但压缩率最高
+          level: 11,
+        },
+      }),
     ],
   },
 };

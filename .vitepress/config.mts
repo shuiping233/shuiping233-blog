@@ -58,8 +58,8 @@ const vitePressConfigs = {
       compression({
         verbose: true,
         disable: false,
-        threshold: -1,
-        filter: () => true,
+        threshold: 5 * 1024,
+        // filter: () => true,
         algorithm: "gzip",
         ext: ".gz",
         compressionOptions: {
@@ -70,8 +70,8 @@ const vitePressConfigs = {
       compression({
         verbose: true,
         disable: false,
-        threshold: -1,
-        filter: () => true,
+        threshold: 5 * 1024,
+        // filter: () => true,
         algorithm: "brotliCompress",
         ext: ".br",
         compressionOptions: {

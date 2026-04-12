@@ -27,8 +27,8 @@ export default {
         const words = pageData.words || 0;
         const readTime = pageData.readTime || 0;
 
-        // 3. 获取标题：优先从 frontmatter 获取，其次是 pageData
-        const title = frontmatter.value.title || pageData.title || "";
+        // 3. 获取标题：只从 frontmatter 获取（没有就不显示，不读取 # 一级标题避免重复）
+        const title = frontmatter.value.title || "";
 
         // 4. 首页不显示
         if (frontmatter.value.layout === "home") return null;

@@ -1,6 +1,7 @@
 import { defineConfig, HeadConfig } from "vitepress";
 import compression from "vite-plugin-compression";
 import { withSidebar } from "vitepress-sidebar";
+import readingTime from "reading-time";
 
 const head: HeadConfig[] = [
   [
@@ -19,6 +20,12 @@ const vitePressConfigs = {
   lang: "zh-CN",
   title: "shuiping233 Blog",
   head: head,
+  transformPageData(pageData: any) {
+    const stats = readingTime(pageData.content || "");
+    pageData.words = stats.words;
+    pageData.readTime = Math.ceil(stats.minutes);
+  },
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
 

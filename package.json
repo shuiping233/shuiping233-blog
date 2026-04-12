@@ -1,7 +1,10 @@
 {
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "reading-time": "^1.5.0",
+    "sharp": "^0.34.5",
     "vite-plugin-compression": "^0.5.1",
     "vitepress": "2.0.0-alpha.17",
     "vitepress-sidebar": "^1.33.1"
@@ -9,6 +12,13 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build --outDir ./dist",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "docs/public/images/**/*.{png,jpg,jpeg,gif}": [
+      "node scripts/convert-webp.mjs",
+      "git add ."
+    ]
   }
 }

@@ -17,7 +17,7 @@ export default {
         const date = pageData.date
           ? new Date(pageData.date).toLocaleDateString("zh-CN")
           : "";
-        
+
         // 获取最后修改时间
         const lastUpdated = pageData.lastUpdated
           ? new Date(pageData.lastUpdated).toLocaleDateString("zh-CN")
@@ -26,7 +26,7 @@ export default {
         // 2. 获取字数和时间：从 page 中读取
         const words = pageData.words || 0;
         const readTime = pageData.readTime || 0;
-        
+
         // 3. 获取标题：优先从 frontmatter 获取，其次是 pageData
         const title = frontmatter.value.title || pageData.title || "";
 
@@ -43,9 +43,16 @@ export default {
           },
           [
             // 显示标题
-            title ? h("h1", {
-              style: "margin-bottom: 16px; font-size: 2rem; font-weight: 600; color: var(--vp-c-text-1);"
-            }, title) : null,
+            title
+              ? h(
+                  "h1",
+                  {
+                    style:
+                      "margin-bottom: 16px; font-size: 2rem; font-weight: 600; color: var(--vp-c-text-1); line-height: 40px;",
+                  },
+                  title,
+                )
+              : null,
             // 显示元信息
             h(
               "div",
@@ -55,9 +62,13 @@ export default {
               },
               [
                 date ? h("span", null, `📅 发布于: ${date}`) : null,
-                lastUpdated && lastUpdated !== date ? h("span", null, `🔄 更新于: ${lastUpdated}`) : null,
+                lastUpdated && lastUpdated !== date
+                  ? h("span", null, `🔄 更新于: ${lastUpdated}`)
+                  : null,
                 words > 0 ? h("span", null, `📝 字数: ${words} 字`) : null,
-                readTime > 0 ? h("span", null, `⌛ 预计: ${readTime} 分钟`) : null,
+                readTime > 0
+                  ? h("span", null, `⌛ 预计: ${readTime} 分钟`)
+                  : null,
               ].filter(Boolean),
             ),
           ].filter(Boolean),

@@ -67,6 +67,7 @@ const vitePressConfigs = {
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    lastUpdated: false,
 
     nav: [
       { text: "主页", link: "/" },
@@ -134,6 +135,8 @@ export default defineConfig(
   withSidebar(vitePressConfigs, [
     {
       documentRootPath: "docs",
+      useTitleFromFrontmatter: true,
+      frontmatterTitleFieldName: "title",
       useTitleFromFileHeading: true,
       useFolderTitleFromIndexFile: true,
       collapsed: false,

@@ -19,9 +19,7 @@ export default {
           : "";
 
         // 获取最后修改时间
-        const lastUpdated = pageData.lastUpdated
-          ? new Date(pageData.lastUpdated).toLocaleDateString("zh-CN")
-          : "";
+        const updateTime = pageData.updateTime;
 
         // 2. 获取字数和时间：从 page 中读取
         const words = pageData.words || 0;
@@ -34,7 +32,7 @@ export default {
         if (frontmatter.value.layout === "home") return null;
 
         // 5. 如果没有任何数据，不显示
-        if (!date && !lastUpdated && words === 0 && !title) return null;
+        if (!date && !updateTime && words === 0 && !title) return null;
 
         return h(
           "div",
@@ -62,8 +60,8 @@ export default {
               },
               [
                 date ? h("span", null, `📅 发布于: ${date}`) : null,
-                lastUpdated && lastUpdated !== date
-                  ? h("span", null, `🔄 更新于: ${lastUpdated}`)
+                updateTime && updateTime !== date
+                  ? h("span", null, `🔄 更新于: ${updateTime}`)
                   : null,
                 words > 0 ? h("span", null, `📝 字数: ${words} 字`) : null,
                 readTime > 0

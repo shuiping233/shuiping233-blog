@@ -52,12 +52,15 @@ const vitePressConfigs = {
           pageData.date = pageData.frontmatter.date;
         }
 
-        // 如果没有设置 lastUpdated，使用文件修改时间
-        if (!pageData.frontmatter.lastUpdated) {
-          pageData.lastUpdated = fileStats.mtime.toISOString().split("T")[0];
-        } else {
-          pageData.lastUpdated = pageData.frontmatter.lastUpdated;
-        }
+        const mtime = fileStats.mtime.toISOString().split("T")[0];
+        pageData.updateTime = mtime;
+
+        // // 如果没有设置 lastUpdated，使用文件修改时间
+        // if (!pageData.frontmatter.lastUpdated) {
+        //   pageData.lastUpdated = fileStats.mtime.toISOString().split("T")[0];
+        // } else {
+        //   pageData.lastUpdated = pageData.frontmatter.lastUpdated;
+        // }
       } catch (e) {
         console.error(
           `[vitepress] Failed to process file: ${pageData.filePath}`,

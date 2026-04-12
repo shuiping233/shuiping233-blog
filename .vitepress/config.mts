@@ -2,7 +2,7 @@ import { defineConfig, HeadConfig } from "vitepress";
 import compression from "vite-plugin-compression";
 import { withSidebar } from "vitepress-sidebar";
 import readingTime from "reading-time";
-import { statSync } from "fs";
+import { statSync, readFileSync } from "fs";
 import { resolve } from "path";
 
 const head: HeadConfig[] = [
@@ -22,34 +22,39 @@ const vitePressConfigs = {
   lang: "zh-CN",
   title: "shuiping233 Blog",
   head: head,
-  transformPageData(pageData: any) {
-    // 计算字数和阅读时间
-    const stats = readingTime(pageData.content || "");
-    pageData.frontmatter.words = stats.words;
-    pageData.frontmatter.readTime = Math.ceil(stats.minutes);
-    
-    // 如果没有设置 date，尝试从文件创建时间获取
-    if (!pageData.frontmatter.date && pageData.filePath) {
+  transformPageData(pageData: any, ctx: any) {
+    // 直接从文件系统读取内容（pageData.content 可能为空）
+    if (pageData.filePath) {
       try {
         const filePath = resolve("docs", pageData.filePath);
-        const stats = statSync(filePath);
-        // 使用文件创建时间
-        const createdDate = stats.birthtime || stats.ctime;
-        pageData.frontmatter.date = createdDate.toISOString().split('T')[0];
+        const content = readFileSync(filePath, 'utf-8');
+        
+        // 移除 frontmatter 部分（--- 之间的内容）
+        const contentWithoutFrontmatter = content.replace(/^---[\s\S]*?---/, '').trim();
+        
+        // 计算字数和阅读时间
+        const stats = readingTime(contentWithoutFrontmatter);
+        pageData.frontmatter.words = stats.words;
+        pageData.frontmatter.readTime = Math.ceil(stats.minutes);
+        
+        // 获取文件状态信息
+        const fileStats = statSync(filePath);
+        
+        // 如果没有设置 date，尝试从文件创建时间获取
+        if (!pageData.frontmatter.date) {
+          const createdDate = fileStats.birthtime || fileStats.ctime;
+          pageData.frontmatter.date = createdDate.toISOString().split('T')[0];
+        }
+        
+        // 如果没有设置 lastUpdated，使用文件修改时间
+        if (!pageData.frontmatter.lastUpdated) {
+          pageData.frontmatter.lastUpdated = fileStats.mtime.toISOString().split('T')[0];
+        }
       } catch (e) {
-        // 如果获取失败，使用当前日期
-        pageData.frontmatter.date = new Date().toISOString().split('T')[0];
-      }
-    }
-    
-    // 如果没有设置 lastUpdated，使用文件修改时间
-    if (!pageData.frontmatter.lastUpdated && pageData.filePath) {
-      try {
-        const filePath = resolve("docs", pageData.filePath);
-        const stats = statSync(filePath);
-        pageData.frontmatter.lastUpdated = stats.mtime.toISOString().split('T')[0];
-      } catch (e) {
-        // 忽略错误
+        console.error(`[vitepress] Failed to process file: ${pageData.filePath}`, e);
+        // 设置默认值
+        pageData.frontmatter.words = 0;
+        pageData.frontmatter.readTime = 0;
       }
     }
   },

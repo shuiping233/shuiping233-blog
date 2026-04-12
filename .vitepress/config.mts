@@ -34,8 +34,9 @@ const vitePressConfigs = {
         
         // 计算字数和阅读时间
         const stats = readingTime(contentWithoutFrontmatter);
-        pageData.frontmatter.words = stats.words;
-        pageData.frontmatter.readTime = Math.ceil(stats.minutes);
+        // 存到 pageData 而不是 frontmatter，避免干扰 sidebar
+        pageData.words = stats.words;
+        pageData.readTime = Math.ceil(stats.minutes);
         
         // 获取文件状态信息
         const fileStats = statSync(filePath);
@@ -43,18 +44,23 @@ const vitePressConfigs = {
         // 如果没有设置 date，尝试从文件创建时间获取
         if (!pageData.frontmatter.date) {
           const createdDate = fileStats.birthtime || fileStats.ctime;
-          pageData.frontmatter.date = createdDate.toISOString().split('T')[0];
+          // 存到 pageData 而不是 frontmatter
+          pageData.date = createdDate.toISOString().split('T')[0];
+        } else {
+          pageData.date = pageData.frontmatter.date;
         }
         
         // 如果没有设置 lastUpdated，使用文件修改时间
         if (!pageData.frontmatter.lastUpdated) {
-          pageData.frontmatter.lastUpdated = fileStats.mtime.toISOString().split('T')[0];
+          pageData.lastUpdated = fileStats.mtime.toISOString().split('T')[0];
+        } else {
+          pageData.lastUpdated = pageData.frontmatter.lastUpdated;
         }
       } catch (e) {
         console.error(`[vitepress] Failed to process file: ${pageData.filePath}`, e);
         // 设置默认值
-        pageData.frontmatter.words = 0;
-        pageData.frontmatter.readTime = 0;
+        pageData.words = 0;
+        pageData.readTime = 0;
       }
     }
   },

@@ -2,3 +2,4 @@ node_modules
 .vitepress/cache
 pnpm-lock.yaml
 dist
+.vscode-edge-debug

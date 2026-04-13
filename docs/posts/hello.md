@@ -109,3 +109,19 @@ gif图片:
 
 > [!WARNING] GitHub 风格的 Alerts
 > 123
+
+markdown emoji:
+
+```md
+:tada:
+:smile:
+:heart:
+:+1:
+:-1:
+```
+
+:tada:  
+:smile:  
+:heart:  
+:+1:  
+:-1:

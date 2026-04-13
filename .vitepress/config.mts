@@ -4,6 +4,7 @@ import { withSidebar } from "vitepress-sidebar";
 import readingTime from "reading-time";
 import { statSync, readFileSync } from "fs";
 import { resolve } from "path";
+import lazyLoading from "markdown-it-image-lazy-loading";
 
 const head: HeadConfig[] = [
   [
@@ -66,6 +67,13 @@ const vitePressConfigs = {
         pageData.readTime = 0;
       }
     }
+  },
+
+  markdown: {
+    config: (md: any) => {
+      // 使用图片懒加载插件
+      md.use(lazyLoading);
+    },
   },
 
   themeConfig: {
@@ -142,19 +150,19 @@ const vitePressConfigs = {
         },
       }),
       // Brotli 压缩
-      compression({
-        verbose: true,
-        disable: false,
-        threshold: 5 * 1024,
-        // filter: () => true,
-        algorithm: "brotliCompress",
-        ext: ".br",
-        compressionOptions: {
-          // Brotli 范围是 0-11
-          // 注意：级别 11 压缩速度极慢，但压缩率最高
-          level: 11,
-        },
-      }),
+      // compression({
+      //   verbose: true,
+      //   disable: false,
+      //   threshold: 5 * 1024,
+      //   // filter: () => true,
+      //   algorithm: "brotliCompress",
+      //   ext: ".br",
+      //   compressionOptions: {
+      //     // Brotli 范围是 0-11
+      //     // 注意：级别 11 压缩速度极慢，但压缩率最高
+      //     level: 11,
+      //   },
+      // }),
     ],
   },
 };

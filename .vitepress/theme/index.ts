@@ -2,75 +2,92 @@ import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { h, onMounted, watch, nextTick } from "vue";
 import { useData, useRoute } from "vitepress";
-import mediumZoom from "medium-zoom";
+import Viewer from "viewerjs";
 import "./custom.css";
 
 export default {
   extends: DefaultTheme,
 
-  // 新增：处理图片放大的 setup 钩子
   setup() {
     const route = useRoute();
+    let viewerInstance: Viewer | null = null;
 
-    const initZoom = () => {
-      // 选择文章区域的图片进行初始化
-      mediumZoom(".vp-doc img", {
-        background: "rgba(0,0,0,0.7)",
-        margin: 24, // 放大后距离屏幕边缘的留白
-      });
+    const initViewer = () => {
+      // 销毁旧实例
+      if (viewerInstance) {
+        viewerInstance.destroy();
+        viewerInstance = null;
+      }
+
+      // 获取文章内容容器
+      const docEl = document.querySelector(".vp-doc") as HTMLElement;
+      if (docEl) {
+        viewerInstance = new Viewer(docEl, {
+          //   className: "image-viewer",
+          inline: false,
+          toolbar: {
+            // 隐藏默认的底部工具栏（如果你需要旋转等功能，可以把对应设为 true）
+            zoomIn: false,
+            zoomOut: false,
+            oneToOne: false,
+            reset: false,
+            prev: false,
+            play: false,
+            next: false,
+            rotateLeft: false,
+            rotateRight: false,
+            flipHorizontal: false,
+            flipVertical: false,
+          },
+          tooltip: false, // 关闭鼠标悬浮时的百分比提示（保持简洁）
+          title: false, // 关闭底部图片名称提示
+          transition: true, // 启用过渡效果
+          fullscreen: true,
+          // 滚轮缩放的灵敏度（默认 0.1，数值越大缩放越快）
+          zoomRatio: 0.35,
+          zoomOnTouch: true, // 触摸设备启用捏合缩放
+          movable: true, // 启用移动图片
+          initialCoverage: 1, // 初始图片尽可能占满容器
+          minWidth: 0, // 设为 0 交由 CSS 的 vw 去接管
+          minHeight: 0, // 设为 0 交由 CSS 的 vh 去接管
+
+          // 点击背景是否关闭（保留 medium-zoom 的体验）
+          backdrop: true,
+        });
+      }
     };
 
-    // 首次加载时初始化
-    onMounted(initZoom);
+    onMounted(initViewer);
 
-    // 监听路由变化（VitePress 切换页面时），重新初始化防止失效
     watch(
       () => route.path,
       () => {
-        nextTick(() => {
-          // 切换页面时，先销毁旧的实例，再重新初始化
-          mediumZoom(".vp-doc img").detach();
-          initZoom();
-        });
+        nextTick(initViewer);
       },
     );
   },
 
-  // 保留你原有的自定义布局插槽
+  // 保留你原有的 Layout 插槽不变
   Layout() {
     return h(DefaultTheme.Layout, null, {
       "doc-before": () => {
         const { frontmatter, page } = useData();
-
-        // 1. 获取日期：从 page 中读取（由 transformPageData 注入，避免干扰 sidebar）
         const pageData = page.value as any;
         const date = pageData.date
           ? new Date(pageData.date).toLocaleDateString("zh-CN")
           : "";
-
-        // 获取最后修改时间
         const updateTime = pageData.updateTime;
-
-        // 2. 获取字数和时间：从 page 中读取
         const words = pageData.words || 0;
         const readTime = pageData.readTime || 0;
-
-        // 3. 获取标题：只从 frontmatter 获取（没有就不显示，不读取 # 一级标题避免重复）
         const title = frontmatter.value.title || "";
 
-        // 4. 首页不显示
         if (frontmatter.value.layout === "home") return null;
-
-        // 5. 如果没有任何数据，不显示
         if (!date && !updateTime && words === 0 && !title) return null;
 
         return h(
           "div",
-          {
-            style: "margin-bottom: 24px;",
-          },
+          { style: "margin-bottom: 24px;" },
           [
-            // 显示标题
             title
               ? h(
                   "h1",
@@ -81,7 +98,6 @@ export default {
                   title,
                 )
               : null,
-            // 显示元信息
             h(
               "div",
               {

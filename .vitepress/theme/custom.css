@@ -1,13 +1,55 @@
-/* 强制显示 footer，即使侧边栏存在 */
+/* 引入 viewerjs 的基础样式 */
+@import "viewerjs/dist/viewer.min.css";
+
+/* 强制显示 footer */
 footer.VPFooter {
   display: block !important;
 }
 
-/* 修复图片放大被侧边栏遮挡的问题 */
-.medium-zoom-overlay {
-  z-index: 100 !important;
+.viewer-button {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  top: 18px !important;
+  right: 36px !important;
+  opacity: 0.8 !important;
+  transition: opacity 0.2s !important;
+  cursor: pointer !important;
 }
 
-.medium-zoom-image--opened {
-  z-index: 101 !important;
+// 👇 直接接管画 X 的两条线，强制绝对居中
+// 画 X 的第一道斜线（\）
+.viewer-button::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 20px !important;
+  height: 2px !important;
+  background-color: #fff !important;
+  margin: 0 !important; // 👈 关键：清掉原来的 margin 居中逻辑
+  transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+// 画 X 的第二道斜线（/）
+.viewer-button::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 20px !important;
+  height: 2px !important;
+  background-color: #fff !important;
+  margin: 0 !important; // 👈 关键：清掉原来的 margin 居中逻辑
+  transform: translate(-50%, -50%) rotate(-45deg) !important;
+}
+
+// 另一条线旋转 -45 度
+.viewer-button::after {
+  transform: translate(-50%, -50%) rotate(-45deg) !important;
+}
+
+.viewer-button:hover {
+  opacity: 1 !important;
 }

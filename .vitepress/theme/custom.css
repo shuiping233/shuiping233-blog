@@ -2,3 +2,12 @@
 footer.VPFooter {
   display: block !important;
 }
+
+/* 修复图片放大被侧边栏遮挡的问题 */
+.medium-zoom-overlay {
+  z-index: 100 !important;
+}
+
+.medium-zoom-image--opened {
+  z-index: 101 !important;
+}

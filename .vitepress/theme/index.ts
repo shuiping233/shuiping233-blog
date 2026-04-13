@@ -1,12 +1,42 @@
 import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
-import { h } from "vue";
-import { useData } from "vitepress";
+import { h, onMounted, watch, nextTick } from "vue";
+import { useData, useRoute } from "vitepress";
+import mediumZoom from "medium-zoom";
 import "./custom.css";
 
-// export default DefaultTheme;
 export default {
   extends: DefaultTheme,
+
+  // 新增：处理图片放大的 setup 钩子
+  setup() {
+    const route = useRoute();
+
+    const initZoom = () => {
+      // 选择文章区域的图片进行初始化
+      mediumZoom(".vp-doc img", {
+        background: "rgba(0,0,0,0.7)",
+        margin: 24, // 放大后距离屏幕边缘的留白
+      });
+    };
+
+    // 首次加载时初始化
+    onMounted(initZoom);
+
+    // 监听路由变化（VitePress 切换页面时），重新初始化防止失效
+    watch(
+      () => route.path,
+      () => {
+        nextTick(() => {
+          // 切换页面时，先销毁旧的实例，再重新初始化
+          mediumZoom(".vp-doc img").detach();
+          initZoom();
+        });
+      },
+    );
+  },
+
+  // 保留你原有的自定义布局插槽
   Layout() {
     return h(DefaultTheme.Layout, null, {
       "doc-before": () => {

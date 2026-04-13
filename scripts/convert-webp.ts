@@ -2,17 +2,30 @@ import sharp from "sharp";
 import fs from "fs";
 import path from "path";
 import { globSync } from "glob";
+import { execFileSync } from "child_process";
+// @ts-ignore
+import gifsicle from "gifsicle";
 
-/**
- * 路径配置
- */
 const DOCS_DIR = path.resolve("docs");
-// 匹配常见的图片格式
 const IMAGE_EXT_REG = /\.(png|jpe?g|gif)$/i;
 
 /**
- * 转换单张图片并更新所有 Markdown 引用
+ * 压缩 GIF 用 gifsicle，返回临时文件路径
  */
+function compressGifWithGifsicle(input: string): string {
+  const tempPath = input.replace(/\.gif$/i, ".optimized.gif");
+  const colors = fs.statSync(input).size > 500 * 1024 ? 128 : 64;
+
+  // 使用 npm 安装的 gifsicle 二进制
+  execFileSync(
+    gifsicle,
+    ["--optimize=3", "--colors", colors.toString(), "-o", tempPath, input],
+    { stdio: "ignore" },
+  );
+
+  return tempPath;
+}
+
 async function processImage(imagePath: string): Promise<void> {
   if (!IMAGE_EXT_REG.test(imagePath)) return;
 
@@ -20,80 +33,77 @@ async function processImage(imagePath: string): Promise<void> {
   if (!fs.existsSync(absolutePath)) return;
 
   const isGif = /\.gif$/i.test(absolutePath);
-  // 生成新的 webp 路径
   const webpPath = absolutePath.replace(IMAGE_EXT_REG, ".webp");
+  let inputPath = absolutePath;
+  let needCleanup = false;
 
   try {
-    // 1. 开始转换
-    // 对于 GIF，必须在构造函数开启 animated: true 才能保留动图帧
-    await sharp(absolutePath, { animated: isGif })
+    // GIF 先用 gifsicle 优化
+    if (isGif) {
+      inputPath = compressGifWithGifsicle(absolutePath);
+      needCleanup = true;
+    }
+
+    // 统一转 WebP
+    await sharp(inputPath, { animated: isGif })
       .webp({
-        quality: 80, // 降低质量以大幅减小体积，技术博客 60 足够了
-        effort: 6, // 消耗更多 CPU 换取更小的体积
+        quality: isGif ? 90 : 100,
+        effort: 6,
+        lossless: !isGif,
         ...(isGif ? { loop: 0 } : {}),
       })
       .toFile(webpPath);
 
-    // 2. 转换成功后删除原图
+    // 清理
+    if (needCleanup && fs.existsSync(inputPath)) {
+      fs.unlinkSync(inputPath);
+    }
     fs.unlinkSync(absolutePath);
 
-    // 3. 全局扫描并替换 Markdown 文件中的文件名
+    // 更新 Markdown
     const oldFileName = path.basename(absolutePath);
     const newFileName = path.basename(webpPath);
-
-    // 获取所有 md 文件列表
-    const mdFiles = globSync(`${DOCS_DIR}/**/*.md`);
+    const mdFiles = globSync(`${DOCS_DIR.split(path.sep).join("/")}/**/*.md`);
 
     for (const mdFile of mdFiles) {
       const content = fs.readFileSync(mdFile, "utf-8");
       if (content.includes(oldFileName)) {
-        // 使用 split/join 替换，简单高效
-        const updatedContent = content.split(oldFileName).join(newFileName);
-        fs.writeFileSync(mdFile, updatedContent, "utf-8");
+        fs.writeFileSync(
+          mdFile,
+          content.split(oldFileName).join(newFileName),
+          "utf-8",
+        );
       }
     }
 
-    console.log(`✨ [Success]: ${oldFileName} -> ${newFileName}`);
+    console.log(`✨ ${oldFileName} → ${newFileName}`);
   } catch (err) {
-    console.error(`❌ [Error] ${imagePath}:`, err);
+    console.error(`❌ ${imagePath}:`, err);
+    if (needCleanup && fs.existsSync(inputPath)) {
+      fs.unlinkSync(inputPath);
+    }
   }
 }
 
-/**
- * 主程序入口
- */
 async function main() {
   const args = process.argv.slice(2);
-
-  // 统一处理成正斜杠路径给 glob 使用
   const globPatternDir = DOCS_DIR.split(path.sep).join("/");
 
   if (args.length > 0) {
-    console.log("⚡ Running in Staged Mode (Pre-commit)...");
-    for (const file of args) {
-      await processImage(file);
-    }
+    console.log("⚡ Staged Mode...");
+    for (const file of args) await processImage(file);
   } else {
-    console.log(`🔎 Scanning all images in: ${DOCS_DIR}`);
-    // 使用统一后的路径
-    const foundImages = globSync(`${globPatternDir}/**/*.{png,jpg,jpeg,gif}`);
+    console.log(`🔎 Scanning ${DOCS_DIR}...`);
+    const images = globSync(`${globPatternDir}/**/*.{png,jpg,jpeg,gif}`);
 
-    if (foundImages.length === 0) {
-      console.log("✅ No compatible images found.");
-      // 调试：打印一下它到底扫的是哪里，方便你排查
-      console.log(
-        `Debug: Searched pattern was ${globPatternDir}/**/*.{png,jpg,jpeg,gif}`,
-      );
+    if (images.length === 0) {
+      console.log("✅ No images found.");
       return;
     }
 
-    console.log(
-      `🚀 Found ${foundImages.length} images. Starting conversion...`,
-    );
-    for (const imgPath of foundImages) {
-      await processImage(imgPath);
-    }
-    console.log("🏁 Batch conversion finished.");
+    console.log(`🚀 ${images.length} images found`);
+    for (const img of images) await processImage(img);
+    console.log("🏁 Done.");
   }
 }
 

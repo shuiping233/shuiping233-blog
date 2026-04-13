@@ -6,7 +6,7 @@ title: 为什么6202年了, updater & uninstaller 反而越来令人恐惧?
 
 前几天我看到微信有篇文章,提到了[`portmaster`](https://github.com/safing/portmaster),说是能以**监控系统中每个应用的链接,还能自动拦截不安全的应用请求出站**,我还挺感兴趣,因为能从应用的角度来跟踪应用的tcp/udp请求,我就可以很轻松发现和干掉某些干坏事的应用了,正好这个软件也是开源的,于是我就抱着尝鲜的想法,下载来玩玩看了,版本是`2.1.7`
 
-![1775994358969](image/令人恐惧的updater和uninstaller/1775994358969.webp)
+![1775994358969](image/令人恐惧的updater和uninstaller/1775994358969.png)
 
 这里没有这款软件实际截图了,因为我不想再跑一遍它的`uninstall.exe`了,原因下面会说
 
@@ -49,7 +49,7 @@ title: 为什么6202年了, updater & uninstaller 反而越来令人恐惧?
 - 我勾选了"删除所有用户数据"(即使我不知道为什么"删除用户数据"这个功能需要去捣鼓Path)
 - [`portmaster的Issue`](https://github.com/safing/portmaster/issues?q=uninstall)页里,能找到很多人反馈的安装或者卸载`portmaster`后,windows系统发生一些严重的问题
 
-![1775998578122](image/令人恐惧的updater和uninstaller/1775998578122.webp)
+![1775998578122](image/令人恐惧的updater和uninstaller/1775998578122.png)
 
 基于上述的推断,我认定是`portmaster`的`uninstall.exe`导致的这个问题
 

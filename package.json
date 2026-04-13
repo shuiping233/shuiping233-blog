@@ -23,5 +23,8 @@
       "node scripts/convert-webp.ts",
       "git add ."
     ]
+  },
+  "dependencies": {
+    "medium-zoom": "^1.1.0"
   }
 }

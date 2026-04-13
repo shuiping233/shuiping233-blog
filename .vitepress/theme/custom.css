@@ -18,7 +18,7 @@ footer.VPFooter {
   cursor: pointer !important;
 }
 
-/* 👇 直接接管画 X 的两条线，强制绝对居中 */
+/* 直接接管画 X 的两条线，强制绝对居中 */
 /* 画 X 的第一道斜线（\） */
 .viewer-button::before {
   content: "" !important;
@@ -28,7 +28,7 @@ footer.VPFooter {
   width: 20px !important;
   height: 2px !important;
   background-color: #fff !important;
-  margin: 0 !important; /* 👈 关键：清掉原来的 margin 居中逻辑 */
+  margin: 0 !important; /* 清掉原来的 margin 居中逻辑 */
   transform: translate(-50%, -50%) rotate(45deg) !important;
 }
 

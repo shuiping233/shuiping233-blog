@@ -44,9 +44,14 @@ const vitePressConfigs = {
         // 获取文件状态信息
         const fileStats = statSync(filePath);
 
-        const createdDate = fileStats.birthtime || fileStats.ctime;
-        // 存到 pageData 而不是 frontmatter
-        pageData.date = createdDate.toISOString().split("T")[0];
+        // 如果没有设置 date，尝试从文件创建时间获取
+        if (!pageData.frontmatter.date) {
+          const createdDate = fileStats.birthtime || fileStats.ctime;
+          // 存到 pageData 而不是 frontmatter
+          pageData.date = createdDate.toISOString().split("T")[0];
+        } else {
+          pageData.date = pageData.frontmatter.date;
+        }
 
         const mtime = fileStats.mtime.toISOString().split("T")[0];
         pageData.updateTime = mtime;

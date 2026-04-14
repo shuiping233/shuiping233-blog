@@ -73,7 +73,9 @@ export default {
       "doc-before": () => {
         const { frontmatter, page } = useData();
         const pageData = page.value as any;
-        const date = pageData.date || "";
+        const date = pageData.date
+          ? new Date(pageData.date).toLocaleDateString("zh-CN")
+          : "";
         const updateTime = pageData.updateTime;
         const words = pageData.words || 0;
         const readTime = pageData.readTime || 0;

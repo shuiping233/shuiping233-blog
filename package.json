@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^25.6.0",
+    "cross-env": "^10.1.0",
     "glob": "^13.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
@@ -22,6 +23,9 @@
     "md:metadata": "tsx scripts/add-md-metadata.ts"
   },
   "lint-staged": {
+    "docs/**/*.md": [
+      "cross-env GIT_HOOKS_HUSKY=true tsx scripts/add-md-metadata.ts"
+    ],
     "docs/public/images/**/*.{png,jpg,jpeg,gif}": [
       "node scripts/convert-webp.ts",
       "git add ."

@@ -1,5 +1,7 @@
 ---
 title: 为什么6202年了, updater & uninstaller 反而越来令人恐惧?
+createAt: 2026-04-12
+updateAt: 2026-04-13
 ---
 
 # 我只是想尝鲜一下`portmaster`,怎么我系统变量的`Path`就什么都没啦?

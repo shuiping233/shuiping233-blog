@@ -2,7 +2,7 @@ import { defineConfig, HeadConfig } from "vitepress";
 import compression from "vite-plugin-compression";
 import { withSidebar } from "vitepress-sidebar";
 import readingTime from "reading-time";
-import { statSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { resolve } from "path";
 import lazyLoading from "markdown-it-image-lazy-loading";
 
@@ -40,28 +40,6 @@ const vitePressConfigs = {
         // 存到 pageData 而不是 frontmatter，避免干扰 sidebar
         pageData.words = stats.words;
         pageData.readTime = Math.ceil(stats.minutes);
-
-        // 获取文件状态信息
-        const fileStats = statSync(filePath);
-
-        // 如果没有设置 date，尝试从文件创建时间获取
-        if (!pageData.frontmatter.date) {
-          const createdDate = fileStats.birthtime || fileStats.ctime;
-          // 存到 pageData 而不是 frontmatter
-          pageData.date = createdDate.toISOString().split("T")[0];
-        } else {
-          pageData.date = pageData.frontmatter.date;
-        }
-
-        const mtime = fileStats.mtime.toISOString().split("T")[0];
-        pageData.updateTime = mtime;
-
-        // // 如果没有设置 lastUpdated，使用文件修改时间
-        // if (!pageData.frontmatter.lastUpdated) {
-        //   pageData.lastUpdated = fileStats.mtime.toISOString().split("T")[0];
-        // } else {
-        //   pageData.lastUpdated = pageData.frontmatter.lastUpdated;
-        // }
       } catch (e) {
         console.error(
           `[vitepress] Failed to process file: ${pageData.filePath}`,
@@ -70,6 +48,8 @@ const vitePressConfigs = {
         // 设置默认值
         pageData.words = 0;
         pageData.readTime = 0;
+        pageData.date = "";
+        pageData.updateTime = "";
       }
     }
   },

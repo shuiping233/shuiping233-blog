@@ -73,16 +73,21 @@ export default {
       "doc-before": () => {
         const { frontmatter, page } = useData();
         const pageData = page.value as any;
-        const date = pageData.date
-          ? new Date(pageData.date).toLocaleDateString("zh-CN")
+
+        // 从 frontmatter 读取 createAt/updateAt
+        const fm = frontmatter.value || {};
+        const createAt = fm.createAt
+          ? new Date(fm.createAt).toISOString().split("T")[0]
           : "";
-        const updateTime = pageData.updateTime;
+        const updateAt = fm.updateAt
+          ? new Date(fm.updateAt).toISOString().split("T")[0]
+          : "";
         const words = pageData.words || 0;
         const readTime = pageData.readTime || 0;
-        const title = frontmatter.value.title || "";
+        const title = fm.title || "";
 
-        if (frontmatter.value.layout === "home") return null;
-        if (!date && !updateTime && words === 0 && !title) return null;
+        if (fm.layout === "home") return null;
+        if (!createAt && !updateAt && words === 0 && !title) return null;
 
         return h(
           "div",
@@ -105,9 +110,9 @@ export default {
                   "color: var(--vp-c-text-2); font-size: 14px; display: flex; flex-wrap: wrap; gap: 18px; opacity: 0.8;",
               },
               [
-                date ? h("span", null, `📅 发布于: ${date}`) : null,
-                updateTime && updateTime !== date
-                  ? h("span", null, `🔄 更新于: ${updateTime}`)
+                createAt ? h("span", null, `📅 发布于: ${createAt}`) : null,
+                updateAt && updateAt !== createAt
+                  ? h("span", null, `🔄 更新于: ${updateAt}`)
                   : null,
                 words > 0 ? h("span", null, `📝 字数: ${words} 字`) : null,
                 readTime > 0

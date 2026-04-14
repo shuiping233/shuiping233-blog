@@ -18,7 +18,8 @@
     "build": "vitepress build --outDir ./dist",
     "preview": "vitepress preview",
     "prepare": "husky",
-    "img:conv": "tsx scripts/convert-webp.ts"
+    "img:conv": "tsx scripts/convert-webp.ts",
+    "md:metadata": "tsx scripts/add-md-metadata.ts"
   },
   "lint-staged": {
     "docs/public/images/**/*.{png,jpg,jpeg,gif}": [

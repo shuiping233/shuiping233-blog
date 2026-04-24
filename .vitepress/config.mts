@@ -70,17 +70,6 @@ const vitePressConfigs = {
       { text: "友情链接", link: "/friend-links" },
     ],
 
-    footer: {
-      message:
-        "本网站内容除非特别声明，采用 <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'>CC BY-NC-SA 4.0</a> 协议进行许可",
-      copyright: `<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2026039817号</a>
-        <a href="https://beian.mps.gov.cn/#/query/webSearch?code=44060402003189" target="_blank" style="display: inline-flex; align-items: center; text-decoration: none;">
-          <img src="/beian.png" style="height: 16px; margin-right: 6px;" alt="公安备案" />
-          粤公网安备44060402003189号
-        </a>
-        `,
-    },
-
     sidebar: {
       "/": {
         base: "/",

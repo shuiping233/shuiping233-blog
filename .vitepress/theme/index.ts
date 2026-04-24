@@ -70,6 +70,54 @@ export default {
   // 保留你原有的 Layout 插槽不变
   Layout() {
     return h(DefaultTheme.Layout, null, {
+      "layout-bottom": () =>
+        h("div", { class: "custom-footer" }, [
+          // 第一行：协议声明
+          h("p", { class: "footer-message" }, [
+            "本网站内容除非特别声明，采用 ",
+            h(
+              "a",
+              {
+                href: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+                target: "_blank",
+                rel: "noopener noreferrer",
+              },
+              "CC BY-NC-SA 4.0",
+            ),
+            " 协议进行许可",
+          ]),
+          // 第二行：备案信息容器
+          h("div", { class: "beian-wrapper" }, [
+            // ICP 备案
+            h(
+              "a",
+              {
+                href: "https://beian.miit.gov.cn/",
+                target: "_blank",
+                class: "beian-link",
+              },
+              "粤ICP备2026039817号",
+            ),
+
+            // 公安备案
+            h(
+              "a",
+              {
+                href: "https://beian.mps.gov.cn/#/query/webSearch?code=44060402003189",
+                target: "_blank",
+                class: "beian-link police-beian",
+              },
+              [
+                h("img", {
+                  src: "/beian.png",
+                  style: "height: 16px; margin-right: 5px;",
+                }),
+                "粤公网安备44060402003189号",
+              ],
+            ),
+          ]),
+        ]),
+
       "doc-before": () => {
         const { frontmatter, page } = useData();
         const pageData = page.value as any;

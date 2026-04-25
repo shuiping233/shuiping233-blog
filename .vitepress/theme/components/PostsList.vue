@@ -34,7 +34,7 @@ onMounted(async () => {
 
 // 按日期倒序排列的创建列表
 const sortedCreatedDates = computed(() => {
-  const dates = Object.keys(postsData.value).filter(date => 
+  const dates = Object.keys(postsData.value).filter(date =>
     postsData.value[date]?.created && postsData.value[date].created!.length > 0
   )
   return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
@@ -42,7 +42,7 @@ const sortedCreatedDates = computed(() => {
 
 // 按日期倒序排列的更新列表
 const sortedUpdatedDates = computed(() => {
-  const dates = Object.keys(postsData.value).filter(date => 
+  const dates = Object.keys(postsData.value).filter(date =>
     postsData.value[date]?.updated && postsData.value[date].updated!.length > 0
   )
   return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
@@ -84,9 +84,6 @@ const toggleUpdateStatus = () => {
         </div>
       </div>
     </section>
-
-    <!-- 分隔线 -->
-    <hr class="divider" />
 
     <!-- 第二部分：文章更新状态 -->
     <section class="posts-section">
@@ -165,6 +162,7 @@ const toggleUpdateStatus = () => {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -178,7 +176,7 @@ const toggleUpdateStatus = () => {
 .date-title {
   font-size: 1.5rem;
   font-weight: 500;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1);
   margin-bottom: 12px;
   padding-left: 8px;
   border-left: 4px solid var(--vp-c-brand-1);

@@ -67,6 +67,7 @@ const vitePressConfigs = {
 
     nav: [
       { text: "主页", link: "/" },
+      { text: "文章列表", link: "/posts-list" },
       { text: "友情链接", link: "/friend-links" },
     ],
 

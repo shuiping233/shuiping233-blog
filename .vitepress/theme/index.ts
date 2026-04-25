@@ -3,10 +3,16 @@ import DefaultTheme from "vitepress/theme";
 import { h, onMounted, watch, nextTick } from "vue";
 import { useData, useRoute } from "vitepress";
 import Viewer from "viewerjs";
+import PostsList from "./components/PostsList.vue";
 import "./custom.css";
 
 export default {
   extends: DefaultTheme,
+
+  enhanceApp({ app }) {
+    // 注册全局组件
+    app.component("PostsList", PostsList);
+  },
 
   setup() {
     const route = useRoute();

@@ -13,8 +13,8 @@ interface Frontmatter {
 // 白名单路径列表
 const WHITELIST_PATHS = ["docs/posts"];
 
-// Posts JSON 文件路径
-const POSTS_JSON_PATH = resolve(process.cwd(), "docs", "posts.json");
+// Posts JSON 文件路径（放在 public 目录下以便 VitePress 构建时复制）
+const POSTS_JSON_PATH = resolve(process.cwd(), "docs", "public", "posts.json");
 
 // Posts JSON 数据结构
 interface PostItem {

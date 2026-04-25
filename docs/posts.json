@@ -1,26 +1,44 @@
 {
-    "2026-04-02": {
-        "created": [
-            "post/hello.md"
-        ],
-        "updated": []
-    },
-    "2026-04-12": {
-        "created": [
-            "post/令人恐惧的updater 和 uninstaller.md"
-        ],
-        "updated": []
-    },
-    "2026-04-13": {
-        "created": [],
-        "updated": [
-            "post/令人恐惧的updater 和 uninstaller.md"
-        ]
-    },
-    "2026-04-14": {
-        "created": [],
-        "updated": [
-            "post/hello.md"
-        ]
-    }
+  "2026-04-12": {
+    "created": [
+      {
+        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
+        "path": "/posts/令人恐惧的updater 和 uninstaller"
+      }
+    ],
+    "updated": [
+      {
+        "title": "文章",
+        "path": "/posts/index"
+      }
+    ]
+  },
+  "2026-04-13": {
+    "updated": [
+      {
+        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
+        "path": "/posts/令人恐惧的updater 和 uninstaller"
+      }
+    ]
+  },
+  "2026-04-02": {
+    "created": [
+      {
+        "title": "第一篇文章",
+        "path": "/posts/hello"
+      },
+      {
+        "title": "文章",
+        "path": "/posts/index"
+      }
+    ]
+  },
+  "2026-04-14": {
+    "updated": [
+      {
+        "title": "第一篇文章",
+        "path": "/posts/hello"
+      }
+    ]
+  }
 }

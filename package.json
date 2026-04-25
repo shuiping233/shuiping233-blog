@@ -20,7 +20,8 @@
     "preview": "pnpx serve ./dist",
     "prepare": "husky",
     "img:conv": "tsx scripts/convert-webp.ts",
-    "md:metadata": "tsx scripts/add-md-metadata.ts"
+    "md:metadata": "tsx scripts/add-md-metadata.ts",
+    "gen:posts-json": "tsx scripts/gen-posts-json.ts"
   },
   "lint-staged": {
     "docs/**/*.md": [

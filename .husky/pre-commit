@@ -1,4 +1,4 @@
 npx lint-staged
 
-# 更新 posts.json（处理删除等 lint-staged 无法覆盖的场景）
-cross-env GIT_HOOKS_HUSKY=true npx tsx scripts/add-md-metadata.ts
+# 重新生成 posts.json（全量扫描，确保数据一致性）
+npx tsx scripts/gen-posts-json.ts

@@ -1,10 +1,26 @@
 {
-    "2026-01-01": {
-        "updated": [
-            "post/xxx.md"
-        ],
+    "2026-04-02": {
         "created": [
-            "post/xxx.md"
+            "post/hello.md"
+        ],
+        "updated": []
+    },
+    "2026-04-12": {
+        "created": [
+            "post/令人恐惧的updater 和 uninstaller.md"
+        ],
+        "updated": []
+    },
+    "2026-04-13": {
+        "created": [],
+        "updated": [
+            "post/令人恐惧的updater 和 uninstaller.md"
+        ]
+    },
+    "2026-04-14": {
+        "created": [],
+        "updated": [
+            "post/hello.md"
         ]
     }
 }

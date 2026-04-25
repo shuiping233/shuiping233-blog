@@ -147,10 +147,7 @@ export default defineConfig(
     collapsed: false,
     includeRootIndexFile: true,
     // 手动排序：确保主页、文章列表、友情链接排在最前面
-    manualSortFileNameByPriority: [
-      "index.md",
-      "posts-list.md",
-      "friend-links.md",
-    ],
+    manualSortFileNameByPriority: ["posts-list.md", "friend-links.md"],
+    excludeByGlobPattern: ["index.md"],
   }),
 );

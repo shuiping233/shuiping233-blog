@@ -71,16 +71,7 @@ const vitePressConfigs = {
       { text: "友情链接", link: "/friend-links" },
     ],
 
-    sidebar: {
-      "/": {
-        base: "/",
-        items: [
-          { text: "主页", link: "/" },
-          { text: "文章列表", link: "/posts-list" },
-          { text: "友情链接", link: "/friend-links" },
-        ],
-      },
-    },
+    // sidebar 由 withSidebar 自动生成，但我们会通过 manualSortFileNameByPriority 控制顺序
 
     socialLinks: [
       { icon: "github", link: "https://github.com/shuiping233" },
@@ -148,14 +139,18 @@ const vitePressConfigs = {
 };
 
 export default defineConfig(
-  withSidebar(vitePressConfigs, [
-    {
-      documentRootPath: "docs",
-      useTitleFromFrontmatter: true,
-      // frontmatterTitleFieldName: "title",
-      useTitleFromFileHeading: true,
-      useFolderTitleFromIndexFile: true,
-      collapsed: false,
-    },
-  ]),
+  withSidebar(vitePressConfigs, {
+    documentRootPath: "docs",
+    useTitleFromFrontmatter: true,
+    useTitleFromFileHeading: true,
+    useFolderTitleFromIndexFile: true,
+    collapsed: false,
+    includeRootIndexFile: true,
+    // 手动排序：确保主页、文章列表、友情链接排在最前面
+    manualSortFileNameByPriority: [
+      "index.md",
+      "posts-list.md",
+      "friend-links.md",
+    ],
+  }),
 );

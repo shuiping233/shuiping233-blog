@@ -18,7 +18,7 @@ updateAt: 2026-07-18
   </ItemGroup>
 ```
 
-所以嘛,只能考虑build完毕后再处理这类dll了, `不过csproj功能非常强大`, 支持build完毕对打包产物文件进行增删改查之类的操作, 只需要在`.csproj`文件的`<Project>`里如下内容, 这样就能build的时候自动把AI相关的dll的移除掉了
+所以嘛,只能考虑build完毕后再处理这类dll了, **不过`MSBuild`+`csproj`的功能非常强大**, 支持build完毕后对打包产物文件进行增删改查之类的操作, 只需要在`.csproj`文件的`<Project>`里如下内容, 这样就能build的时候自动把AI相关的dll的移除掉了
 
 ```xml
 <Target Name="RemoveUnusedAiDlls" AfterTargets="Build;Publish">

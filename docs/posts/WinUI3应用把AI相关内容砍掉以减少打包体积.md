@@ -8,7 +8,7 @@ updateAt: 2026-07-18
 
 我最近做了一个表情包管理器[MemeManager], 想到我这边只windows上用, 于是乎选了[WinUI3]框架来搓, 因为它ui和控件设计风格和动画确实是非常不错的, 但是用过才知道坑也确实不少, Win32 API 和 框架设计让我吃了不少苦头
 
-由于WinUI3的AI部分完全和`WindowsAppSDK`绑在一起发布, 所以没法单独通过不去build AI接口相关的dll,
+由于WinUI3的AI部分完全和`WindowsAppSDK`绑在一起发布, 所以没法单独通过不去依赖AI接口相关的库来免除这部分dll的构建流程
 
 ```xml
 <ItemGroup>

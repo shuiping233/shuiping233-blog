@@ -57,7 +57,7 @@ Microsoft.Windows.AI.Projection.dll
 System.Numerics.Tensors.dll
 ```
 
-当然了看这些dll名称也能猜到这些dll是负责什么部分的, 理论上应用里没有用到相关的接口和控件, 是可以删掉这类这些不需要的dll的, WinUI3的模块化这块坐的是真的还行, 下面就列一下dll的分类
+当然了看这些dll名称也能猜到这些dll是负责什么部分的, 理论上应用里没有用到相关的接口和控件, 是可以删掉这类这些不需要的dll的, WinUI3的模块化这块做的是真的还行, 下面就列一下dll的分类
 
 - webview2相关
 

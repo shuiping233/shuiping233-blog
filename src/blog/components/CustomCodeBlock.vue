@@ -121,18 +121,20 @@ const highlighted = computed(() => lines.value.map(highlightLine))
   html.theme-dark .custom-code-block {
     --code-bg: #1e1e1e;
     --code-border: rgba(255, 255, 255, 0.12);
-    --code-fg: #d4d4d4;
-    --tok-kw: #569cd6;
-    --tok-str: #ce9178;
-    --tok-com: #6a9955;
-    --tok-num: #b5cea8;
+    --code-fg: #f0f6fc;
+    /* GitHub dark (prettylights) 配色：pl-k / pl-sra / pl-c / pl-c1 */
+    --tok-kw: #ff7b72;
+    --tok-str: #a5d6ff;
+    --tok-com: #9198a1;
+    --tok-num: #79c0ff;
   }
 
   html:not(.theme-dark) .custom-code-block {
-    --tok-kw: #0000ff;
-    --tok-str: #a31515;
-    --tok-com: #008000;
-    --tok-num: #098658;
+    /* GitHub light (prettylights) 配色 */
+    --tok-kw: #cf222e;
+    --tok-str: #0a3069;
+    --tok-com: #59636e;
+    --tok-num: #0550ae;
   }
 
   .code-header {

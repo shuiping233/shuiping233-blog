@@ -1,6 +1,5 @@
 node_modules
-.vitepress/cache
-pnpm-lock.yaml
 dist
+pnpm-lock.yaml
 .vscode-edge-debug
 .reasonix

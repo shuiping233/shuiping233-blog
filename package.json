@@ -1,23 +1,31 @@
 {
+  "dependencies": {
+    "github-markdown-css": "^5.8.1",
+    "markdown-it-emoji": "^3.1.0",
+    "markstream-vue": "^1.0.8",
+    "viewerjs": "^1.11.7",
+    "vue": "^3.5.32"
+  },
   "devDependencies": {
-    "@types/markdown-it": "^14.1.2",
+    "@tsconfig/node24": "^24.0.4",
     "@types/node": "^25.6.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/tsconfig": "^0.9.1",
     "cross-env": "^10.1.0",
     "glob": "^13.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "markdown-it-image-lazy-loading": "^2.0.1",
-    "reading-time": "^1.5.0",
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",
+    "typescript": "~6.0.0",
+    "vite": "^8.0.8",
     "vite-plugin-compression": "^0.5.1",
-    "vitepress": "2.0.0-alpha.17",
-    "vitepress-sidebar": "^1.33.1"
+    "vue-tsc": "^3.2.6"
   },
   "scripts": {
-    "dev": "vitepress dev",
-    "build": "vitepress build --outDir ./dist",
-    "preview": "vitepress build --outDir ./dist && pnpx serve ./dist",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
     "prepare": "husky",
     "img:conv": "tsx scripts/convert-webp.ts",
     "md:metadata": "tsx scripts/add-md-metadata.ts",
@@ -32,7 +40,11 @@
       "git add ."
     ]
   },
-  "dependencies": {
-    "viewerjs": "^1.11.7"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.20.0",
+      "onFail": "download"
+    }
   }
 }

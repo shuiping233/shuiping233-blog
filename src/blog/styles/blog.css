@@ -1,0 +1,72 @@
+/* 博客全局样式：WinUIonWeb 图标字体 + 布局微调 */
+
+@font-face {
+  font-family: 'WinUIOnWebIcons';
+  src: url('winui/assets/Fonts/SEGOEICONS.TTF') format('truetype');
+  font-display: block;
+}
+
+body .icon,
+body .icon-btn,
+body .win-asb-icon,
+body .win-combo-chevron,
+body .win-expander-arrow,
+body .win-menu-flyout-icon,
+body .win-menu-flyout-check,
+body .win-menu-flyout-check-placeholder,
+body .win-menu-flyout-chevron,
+body .checkbox-glyph,
+body .close-icon,
+body .font-icon,
+body .icon-glyph,
+body .group-icon {
+  font-family: 'WinUIOnWebIcons';
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  background: var(--app-bg, #f3f3f3);
+  color: var(--text-primary, #1b1b1b);
+}
+
+/* ---- 文章 markdown 排版（github-markdown-css 容器） ---- */
+.blog-markdown-body {
+  background: transparent;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  max-width: none;
+}
+
+.blog-markdown-body :is(h1, h2, h3, h4, h5, h6) {
+  border-bottom: none;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.blog-markdown-body img {
+  max-width: 100%;
+}
+
+.blog-markdown-body pre {
+  background: var(--code-bg, rgba(0, 0, 0, 0.06));
+  border-radius: 6px;
+}
+
+html.theme-dark .blog-markdown-body pre {
+  --code-bg: rgba(255, 255, 255, 0.08);
+}
+
+.blog-markdown-body blockquote {
+  color: var(--text-secondary, #6b6b6b);
+}

@@ -1,4 +1,4 @@
-npx lint-staged
+pnpm exec lint-staged
 
 # 重新生成 posts.json（全量扫描，确保数据一致性）
-npx tsx scripts/gen-posts-json.ts
+pnpm exec tsx scripts/gen-posts-json.ts

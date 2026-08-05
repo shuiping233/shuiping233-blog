@@ -2,24 +2,13 @@
   <WinTitleBar :title="appTitle" theme="dark" />
   <WinToolTipService />
   <div class="blog-app-content" :class="{ 'has-titlebar': titleBarActive }">
-    <WinNavigationView
-      :SelectedItem="selectedItem"
-      PaneDisplayMode="Auto"
-      :MenuItems="menuItems"
-      :FooterMenuItems="footerMenuItems"
-      :IsSettingsVisible="false"
-      IsBackButtonVisible="Collapsed"
+    <WinNavigationView :SelectedItem="selectedItem" PaneDisplayMode="Auto" :MenuItems="menuItems"
+      :FooterMenuItems="footerMenuItems" :IsSettingsVisible="false" IsBackButtonVisible="Collapsed"
       @ItemInvoked="onItemInvoked">
       <template #AutoSuggestBox>
-        <WinAutoSuggestBox
-          PlaceholderText="搜索文章…"
-          QueryIcon="Find"
-          v-model:Text="searchText"
-          :ItemsSource="searchSuggestions"
-          TextMemberPath="title"
-          @TextChanged="onSearchTextChanged"
-          @SuggestionChosen="onSuggestionChosen"
-          @QuerySubmitted="onQuerySubmitted" />
+        <WinAutoSuggestBox PlaceholderText="搜索文章…" QueryIcon="Find" v-model:Text="searchText"
+          :ItemsSource="searchSuggestions" TextMemberPath="title" @TextChanged="onSearchTextChanged"
+          @SuggestionChosen="onSuggestionChosen" @QuerySubmitted="onQuerySubmitted" />
       </template>
 
       <div class="blog-page">
@@ -80,7 +69,7 @@ interface NavItem {
 // ---- 侧栏菜单：首页 + 分类（展开即文章标题），底部置顶「设置」 ----
 const menuItems = computed<NavItem[]>(() => [
   { Tag: 'home', Icon: '\uE80F', Content: '首页' },
-  { Tag: 'overview', Icon: '\uE9D2', Content: '总览' },
+  { Tag: 'overview', Icon: '\uE9D2', Content: '文章总览' },
   ...categories.map((cat) => ({
     Tag: `cat:${cat.id}`,
     Icon: cat.icon,
@@ -99,7 +88,7 @@ const footerMenuItems: NavItem[] = [
 
 // ---- URL 路由（History 模式）----
 // /             → home
-// /overview     → 总览
+// /overview     → 文章总览
 // /posts/:slug  → 文章（slug 为文件名，可能含中文/空格，需 encode/decode）
 // /settings     → settings
 const routeToTag = (path: string): string => {
@@ -204,36 +193,36 @@ const onQuerySubmitted = ({
 </script>
 
 <style>
-  .blog-app-content {
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-    min-height: 0;
-  }
+.blog-app-content {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
 
-  .blog-app-content.has-titlebar {
-    --blog-titlebar-height: var(--win-titlebar-height, env(titlebar-area-height, 32px));
-    height: calc(100% - var(--blog-titlebar-height));
-    margin-top: var(--blog-titlebar-height);
-  }
+.blog-app-content.has-titlebar {
+  --blog-titlebar-height: var(--win-titlebar-height, env(titlebar-area-height, 32px));
+  height: calc(100% - var(--blog-titlebar-height));
+  margin-top: var(--blog-titlebar-height);
+}
 
-  .blog-page {
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-    min-height: 0;
-  }
+.blog-page {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
 
-  .blog-fade-enter-active {
-    transition: opacity 0.18s ease;
-  }
+.blog-fade-enter-active {
+  transition: opacity 0.18s ease;
+}
 
-  .blog-fade-leave-active {
-    transition: opacity 0.1s ease;
-  }
+.blog-fade-leave-active {
+  transition: opacity 0.1s ease;
+}
 
-  .blog-fade-enter-from,
-  .blog-fade-leave-to {
-    opacity: 0;
-  }
+.blog-fade-enter-from,
+.blog-fade-leave-to {
+  opacity: 0;
+}
 </style>

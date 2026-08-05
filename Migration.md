@@ -28,12 +28,16 @@
   - `pages/HomePage.vue` — 渲染 `docs/index.md`（欢迎语 + 项目列表）
   - `pages/ArticlePage.vue` — markstream-vue 渲染文章
   - `pages/SettingsPage.vue` — 外观 → 主题 → WinRadioButtons 一行（跟随系统/浅色/深色），默认跟随系统
-  - `data/posts.ts` — `import.meta.glob` 扫描 `docs/posts/*.md`，解析 frontmatter，全部归「未分类」
+  - `data/posts.ts` — `import.meta.glob` 扫描 `docs/posts/*.md`，解析 frontmatter
+  - **分类**：frontmatter `category: 分类名`（单值字符串），数据层动态构建分类列表，未指定归「未分类」；
+    分类 id 由分类名派生（kebab-case）
+  - **footer**：`components/BlogFooter.vue` — CC BY-NC-SA 4.0 + 粤ICP备2026039817号 + 粤公网安备44060402003189号
+  - **图片查看器**：`components/CustomImageNode.vue` 包装 markstream ImageNode，点击用 viewerjs 灯箱
 - **构建**：`pnpm build` = `vue-tsc --noEmit && vite build`；dist 只含 `assets/`、`posts/image/`（图片视频，由
   vite 插件复制）、`public/`（favicon/beian/posts.json）、`index.html`、`404.html`
+- **性能**：页面级懒加载（defineAsyncComponent），markstream（约 650KB）按需加载，首屏主 chunk ≈ 179KB
 - **已删除**：`.vitepress/`、`docs/posts-list.md`、`docs/friend-links.md`、vitepress/vitepress-sidebar 依赖
-- **已知待补**：分类字段（暂全部归「未分类」）、viewerjs 图片查看器、footer 备案、
-  chunk 体积优化（单文件 649KB，可 code-split）
+- **已知待补**：暂无阻塞项（分类/viewerjs/footer/懒加载均已完成）；后续可考虑 SSG 预渲染提升 SEO
 
 下方注意事项仍有效，供后续扩展（路由、分类、图片查看器等）对照。
 

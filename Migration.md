@@ -164,6 +164,25 @@ md 里写的是 `![x](image/hello/1776084507027.webp)`、`<video src="./image/he
 - 纯静态托管（GitHub Pages 等）：用 404.html 兜底 trick（dist 已生成）
 - 部署脚本 `deploy.yml` 目前 SCP `dist/*`，远端 `update_blog.sh` 需确认 nginx 已配 `try_files`
 
+**性能 / 缓存配置**（Lighthouse 建议，nginx 一并配置）：
+```nginx
+# 预压缩 gzip 文件直出（dist 已生成 *.gz）
+gzip_static on;
+
+# 带 hash 的静态资源（assets/**）可长缓存
+location /assets/ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+}
+
+# 无 hash 的 HTML 不缓存（保证更新即时可见）
+location = /index.html {
+    add_header Cache-Control "no-cache";
+}
+```
+- `.gz` 文件由 `vite-plugin-compression` 生成，nginx `gzip_static on` 直接服务预压缩文件（省 CPU）
+- 字体 `SEGOEICONS.TTF`（454KB）在 `/assets/` 内，长缓存 + `font-display: swap`（blog.css 已配）避免阻塞渲染
+
 ### 2.10 SEO / meta
 VitePress 自动输出 `title`、`lang`、`meta description`。雏形 `main.ts` 只有
 `document.title = 'WinUI 博客'`。自研时按文章设置 `document.title`（frontmatter title），

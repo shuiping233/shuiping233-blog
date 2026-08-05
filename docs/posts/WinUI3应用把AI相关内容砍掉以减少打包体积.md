@@ -1,7 +1,8 @@
 ---
 title: WinUI3应用把AI相关内容砍掉以减少打包体积
+category: WinUI3
 createAt: 2026-07-18
-updateAt: 2026-07-18
+updateAt: 2026-08-05
 ---
 
 # Windows App Sdk 强制捆绑AI相关接口, 即使没有用到这部分的库

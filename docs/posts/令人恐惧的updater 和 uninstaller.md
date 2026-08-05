@@ -1,5 +1,6 @@
 ---
 title: 为什么6202年了, updater & uninstaller 反而越来令人恐惧?
+category: 随笔
 createAt: 2026-04-12
 updateAt: 2026-04-13
 ---

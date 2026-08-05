@@ -19,6 +19,7 @@ interface RawFrontmatter {
   title?: string
   createAt?: string
   updateAt?: string
+  category?: string // 用户选定的分类字段名：单值字符串，如 `category: WinUI3`
   [key: string]: string | undefined
 }
 
@@ -88,9 +89,32 @@ function convertGithubAlerts(body: string): string {
   return out.join('\n')
 }
 
-export const categories: BlogCategory[] = [
-  { id: 'uncategorized', name: '未分类', icon: '\uE8B7' },
-]
+// 分类 id 由分类名派生（URL 安全）：中文/空格 → kebab-case
+function categoryIdOf(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+// 分类从文章 frontmatter 的 category 字段动态构建；未指定的文章归「未分类」
+export const categories: BlogCategory[] = (() => {
+  const nameSet = new Set<string>()
+  for (const raw of Object.values(rawModules)) {
+    const { frontmatter } = parseFrontmatter(raw)
+    if (frontmatter.category?.trim()) nameSet.add(frontmatter.category.trim())
+  }
+  const named = [...nameSet].map((name) => ({
+    id: categoryIdOf(name),
+    name,
+    icon: '\uE8B7',
+  }))
+  const uncategorized: BlogCategory = { id: 'uncategorized', name: '未分类', icon: '\uE8B7' }
+  return [...named, uncategorized]
+})()
+
+export const UNCATEGORIZED_ID = 'uncategorized'
 
 // Vite 原生支持以原文方式导入全部 md，零依赖。
 // 注意：不能用 as:'raw'（Vite 8/rolldown 报 ParseError），必须 query:'?raw' + import:'default'
@@ -109,10 +133,11 @@ export const posts: BlogPost[] = Object.keys(rawModules)
   .map((modulePath) => {
     const raw = rawModules[modulePath]
     const { frontmatter } = parseFrontmatter(raw)
+    const categoryName = frontmatter.category?.trim()
     return {
       slug: slugOf(modulePath),
       title: frontmatter.title || slugOf(modulePath),
-      category: 'uncategorized',
+      category: categoryName ? categoryIdOf(categoryName) : UNCATEGORIZED_ID,
       date: frontmatter.createAt || '',
     }
   })

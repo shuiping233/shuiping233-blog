@@ -6,11 +6,13 @@
         <span v-if="post.date" class="article-date">{{ post.date }}</span>
       </div>
       <h1 class="page-header">{{ post.title }}</h1>
-      <MarkdownRender
-        class="blog-markdown-body markdown-body"
-        custom-id="blog"
-        :content="content"
-        :custom-markdown-it="customMarkdownIt" />
+      <WinRichTextBlock class="article-rich" IsTextSelectionEnabled>
+        <MarkdownRender
+          class="blog-markdown-body markdown-body"
+          custom-id="blog"
+          :content="content"
+          :custom-markdown-it="customMarkdownIt" />
+      </WinRichTextBlock>
       <BlogFooter />
     </article>
   </WinScrollViewer>
@@ -19,6 +21,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
+import WinRichTextBlock from 'winui/components/WinRichTextBlock.vue'
 import MarkdownRender from 'markstream-vue'
 import type { BlogPost } from '../data/posts'
 import { categories, getPostContent } from '../data/posts'
@@ -72,5 +75,19 @@ const content = computed(() => getPostContent(props.post.slug))
 
   .article-root .page-header {
     margin-bottom: 24px;
+  }
+
+  /* WinRichTextBlock 作为富文本容器：接管 markstream 的样式，
+     屏蔽其自带 p/a 默认样式干扰 markstream 渲染 */
+  .article-rich {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .article-rich :deep(p),
+  .article-rich :deep(a) {
+    margin: 0;
+    color: inherit;
   }
 </style>

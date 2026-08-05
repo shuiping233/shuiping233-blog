@@ -169,8 +169,10 @@ body {
 
 /* 图标字形在 16px 行高内偏上（Segoe 图标字体基线问题），
    增大行高把字形在行框内下压，与同行文本视觉对齐（实测 35px 正好）。
-   注意：WinInfoBar 给 span 内联了 line-height:16px，需 !important 覆盖。 */
-.win-infobar.no-banner-content .win-infobar-standard-icon-area :deep(.win-infobar-standard-icon) {
+   注意：WinInfoBar 给 span 内联了 line-height:16px，需 !important 覆盖。
+   blog.css 是全局 CSS，不能用 :deep()（Vue scoped 伪类，浏览器忽略），
+   直接写普通后代选择器。 */
+.win-infobar.no-banner-content .win-infobar-standard-icon-area .win-infobar-standard-icon {
   line-height: 35px !important;
 }
 

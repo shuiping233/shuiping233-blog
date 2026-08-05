@@ -92,8 +92,11 @@ body {
   margin-top: auto;
 }
 
-/* 首页/文章内容不参与 flex 撑高，保持原有块级流式布局 */
-.blog-page-scroll .blog-page-root .blog-markdown-body {
+/* 首页/文章内容不参与 flex 撑高，保持原有块级流式布局。
+   注意：用 > 直接子选择器，避免命中 infobar/容器内部嵌套的 BlogMarkdown
+   （它们不应有 48px 底部 padding，否则容器内文本底部留白过大）。 */
+.blog-page-scroll .blog-page-root > .blog-markdown-body,
+.blog-page-scroll .blog-page-root > .article-rich > .blog-markdown-body {
   flex: 0 0 auto;
   /* 与 footer 的间距 */
   padding-bottom: 48px;
@@ -154,8 +157,8 @@ body {
 }
 
 .win-infobar.no-banner-content .win-infobar-content-area {
-  align-self: center;
-  padding: 12px 16px 12px 0;
+  align-self: start; /* 顶部对齐，与图标同行 */
+  padding: 12px 16px 12px 0; /* 顶部 12px 与图标 margin-top 对齐 */
   min-width: 0;
 }
 

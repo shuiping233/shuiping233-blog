@@ -58,6 +58,7 @@ import { projects } from '../data/projects'
 
   .home-root {
     max-width: 880px;
+    margin-inline: auto; /* 右侧区域整体居中（Windows 设置页风格） */
     padding: 40px 48px 0;
   }
 

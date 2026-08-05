@@ -115,9 +115,11 @@ body {
 }
 
 /* 无序列表 marker：一级实心圆 / 二级空心圆 / 三级及更深方块
-   颜色用 GitHub 的 fgColor-default（深色下 #f0f6fc 白） */
+   颜色用 GitHub 的 fgColor-default（深色下 #f0f6fc 白）。
+   注意：markstream 的 ul>.list-item[data-v]::marker 特异性更高，
+   需 !important 强制颜色。 */
 .blog-markdown-body ul > li::marker {
-  color: var(--fgColor-default, var(--color-fg-default, #f0f6fc));
+  color: var(--fgColor-default, var(--color-fg-default, #f0f6fc)) !important;
   list-style-type: disc;
 }
 

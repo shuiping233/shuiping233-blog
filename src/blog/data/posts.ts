@@ -64,10 +64,13 @@ function convertGithubAlerts(body: string): string {
     CAUTION: 'caution',
   }
   let i = 0
+  let inFence = false
   while (i < lines.length) {
     const line = lines[i]
+    // 跟踪代码块围栏：围栏内的 > [!TYPE] 是示例，不转换
+    if (/^\s*```/.test(line)) inFence = !inFence
     const match = line.match(/^\s*>\s*\[!([A-Z]+)\]\s*(.*)$/)
-    if (match && typeMap[match[1]]) {
+    if (!inFence && match && typeMap[match[1]]) {
       const container = typeMap[match[1]]
       const content: string[] = []
       // 同行标题（> [!WARNING] 标题）作为首行内容
@@ -88,6 +91,39 @@ function convertGithubAlerts(body: string): string {
       i++
     }
   }
+  return out.join('\n')
+}
+
+// ::: 预置容器名 → blog- 前缀（info→blog-info 等）。
+// markstream 的预置名（info/tip/warning/danger...）解析成 admonition 内置节点，
+// 无法被 setCustomComponents 覆盖；改成非预置名后解析为 vmr_container，
+// 走已验证可靠的 vmr_container 覆盖链（与 ::: details 同路径）。
+// 注意：必须跳过代码块围栏内的 ::: 示例（否则破坏代码块内容）。
+const ADMONITION_PREFIX_MAP: Record<string, string> = {
+  info: 'blog-info',
+  tip: 'blog-tip',
+  note: 'blog-note',
+  caution: 'blog-caution',
+  warning: 'blog-warning',
+  danger: 'blog-danger',
+  error: 'blog-error',
+  success: 'blog-success',
+}
+
+function convertAdmonitionNames(body: string): string {
+  const lines = body.split('\n')
+  let inFence = false
+  const out = lines.map((line) => {
+    // 跟踪代码块围栏（``` 开头），围栏内的 ::: 是示例，不转换
+    if (/^\s*```/.test(line)) inFence = !inFence
+    if (inFence) return line
+    const match = line.match(/^:::\s*([a-z]+)(\s.*)?$/)
+    if (match && ADMONITION_PREFIX_MAP[match[1]]) {
+      const rest = match[2] ?? ''
+      return `::: ${ADMONITION_PREFIX_MAP[match[1]]}${rest}`
+    }
+    return line
+  })
   return out.join('\n')
 }
 
@@ -155,7 +191,7 @@ export const getPostContent = (slug: string): string => {
   )
   if (!entry) return ''
   const { body } = parseFrontmatter(entry[1])
-  return convertGithubAlerts(rewriteAssetPaths(body))
+  return convertAdmonitionNames(convertGithubAlerts(rewriteAssetPaths(body)))
 }
 
 export const getPost = (slug: string): BlogPost | undefined =>
@@ -167,17 +203,3 @@ export const getPostsByCategory = (categoryId: string): BlogPost[] =>
 // 全部文章标题，供搜索建议使用
 export const allPostTitles = (): { title: string; slug: string }[] =>
   posts.map((p) => ({ title: p.title, slug: p.slug }))
-
-// 首页内容：渲染 docs/index.md（去掉 frontmatter）
-const indexRawModule = import.meta.glob('../../../docs/index.md', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>
-
-export const homeContent: string = (() => {
-  const entry = Object.values(indexRawModule)[0]
-  if (!entry) return '# 欢迎来到我的博客'
-  const { body } = parseFrontmatter(entry)
-  return convertGithubAlerts(rewriteAssetPaths(body))
-})()

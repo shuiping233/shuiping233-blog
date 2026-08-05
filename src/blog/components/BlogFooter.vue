@@ -40,7 +40,8 @@ const beianUrl = `${import.meta.env.BASE_URL}public/beian.png`
     font-size: 14px;
   }
 
-  html.theme-dark .blog-footer {
+  html.theme-dark .blog-footer,
+  html.dark .blog-footer {
     border-top-color: rgba(255, 255, 255, 0.1);
   }
 

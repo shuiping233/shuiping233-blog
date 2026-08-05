@@ -51,7 +51,8 @@ const innerMarkdown = computed(() => {
     overflow: hidden;
   }
 
-  html.theme-dark .blog-details {
+  html.theme-dark .blog-details,
+  html.dark .blog-details {
     --card-stroke: rgba(255, 255, 255, 0.12);
   }
 

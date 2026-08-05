@@ -182,8 +182,11 @@ body {
 }
 
 /* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights dark ----
-   字号与正文一致（不缩小，保证可读性）。 */
-.blog-markdown-body :not(pre) > code {
+   字号与正文一致（不缩小，保证可读性）。
+   注意：markstream 把行内代码渲染成 span.inline-code（非 code 标签），
+   选择器需同时覆盖两者。 */
+.blog-markdown-body :not(pre) > code,
+.blog-markdown-body .inline-code {
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 100%; /* 与正文同号（GitHub 默认 85% 会缩小，这里恢复） */

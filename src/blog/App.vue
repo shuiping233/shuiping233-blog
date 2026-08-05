@@ -36,9 +36,10 @@ import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
 // 在同一模块实例，懒加载会破坏 setCustomComponents 的全局注册生效）。
 // SettingsPage 无 markstream 依赖，保持懒加载。
 import HomePage from './pages/HomePage.vue'
-import ArticlePage from './pages/ArticlePage.vue'
 import OverviewPage from './pages/OverviewPage.vue'
 import CategoryPage from './pages/CategoryPage.vue'
+// ArticlePage 懒加载：只有它用 markstream（约 650KB），首页/总览/分类页不加载
+const ArticlePage = defineAsyncComponent(() => import('./pages/ArticlePage.vue'))
 const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
 import {
   categories,

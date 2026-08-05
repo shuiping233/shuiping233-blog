@@ -13,6 +13,8 @@ export interface BlogPost {
   title: string
   category: string // 所属分类 id
   date: string // createAt 或空
+  /** 原始分类名（frontmatter category），仅用于派生 categories；未分类文章为 undefined */
+  _categoryName?: string
 }
 
 interface RawFrontmatter {
@@ -98,24 +100,6 @@ function categoryIdOf(name: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-// 分类从文章 frontmatter 的 category 字段动态构建；未指定的文章归「未分类」
-export const categories: BlogCategory[] = (() => {
-  const nameSet = new Set<string>()
-  for (const raw of Object.values(rawModules)) {
-    const { frontmatter } = parseFrontmatter(raw)
-    if (frontmatter.category?.trim()) nameSet.add(frontmatter.category.trim())
-  }
-  const named = [...nameSet].map((name) => ({
-    id: categoryIdOf(name),
-    name,
-    icon: '\uE8B7',
-  }))
-  const uncategorized: BlogCategory = { id: 'uncategorized', name: '未分类', icon: '\uE8B7' }
-  return [...named, uncategorized]
-})()
-
-export const UNCATEGORIZED_ID = 'uncategorized'
-
 // Vite 原生支持以原文方式导入全部 md，零依赖。
 // 注意：不能用 as:'raw'（Vite 8/rolldown 报 ParseError），必须 query:'?raw' + import:'default'
 const rawModules = import.meta.glob('../../../docs/posts/*.md', {
@@ -129,6 +113,11 @@ function slugOf(modulePath: string): string {
   return fileName.replace(/\.md$/, '')
 }
 
+export const UNCATEGORIZED_ID = 'uncategorized'
+
+// 文章目录：从 frontmatter 读取 title/category/createAt
+// 注意：此处先构建 posts，分类（categories）从 posts 派生，避免模块初始化时
+// 在 const 声明前访问 rawModules（TDZ ReferenceError，dev 白屏）。
 export const posts: BlogPost[] = Object.keys(rawModules)
   .map((modulePath) => {
     const raw = rawModules[modulePath]
@@ -138,10 +127,27 @@ export const posts: BlogPost[] = Object.keys(rawModules)
       slug: slugOf(modulePath),
       title: frontmatter.title || slugOf(modulePath),
       category: categoryName ? categoryIdOf(categoryName) : UNCATEGORIZED_ID,
+      // 派生分类所需的原始分类名（未指定的为 undefined → 归未分类）
+      _categoryName: categoryName,
       date: frontmatter.createAt || '',
     }
   })
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+
+// 分类从已构建的 posts 派生（依赖顺序：rawModules → posts → categories）
+export const categories: BlogCategory[] = (() => {
+  const nameSet = new Set<string>()
+  for (const post of posts) {
+    if (post._categoryName) nameSet.add(post._categoryName)
+  }
+  const named = [...nameSet].map((name) => ({
+    id: categoryIdOf(name),
+    name,
+    icon: '\uE8B7',
+  }))
+  const uncategorized: BlogCategory = { id: UNCATEGORIZED_ID, name: '未分类', icon: '\uE8B7' }
+  return [...named, uncategorized]
+})()
 
 export const getPostContent = (slug: string): string => {
   const entry = Object.entries(rawModules).find(

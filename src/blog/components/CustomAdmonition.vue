@@ -24,27 +24,31 @@ const props = defineProps<{
 const isOpen = ref(true)
 
 const SEVERITY_MAP: Record<string, string> = {
-  info: 'Informational',
-  tip: 'Informational',
-  note: 'Informational',
-  caution: 'Warning',
-  warning: 'Warning',
-  danger: 'Error',
-  error: 'Error',
-  success: 'Success',
+  'blog-info': 'Informational',
+  'blog-tip': 'Informational',
+  'blog-note': 'Informational',
+  'blog-caution': 'Warning',
+  'blog-warning': 'Warning',
+  'blog-danger': 'Error',
+  'blog-error': 'Error',
+  'blog-success': 'Success',
 }
 
 const severity = computed(() => SEVERITY_MAP[props.node.name ?? ''] ?? 'Informational')
-const title = computed(() => props.node.attrs?.title ?? '')
+// vmr_container 的标题在 attrs.args（::: blog-info 标题）
+const title = computed(() => props.node.attrs?.title ?? props.node.attrs?.args ?? '')
 
 // children 是 markdown 节点，用 raw 重新解析渲染最可靠
 const innerMarkdown = computed(() => {
   const raw = props.node.raw ?? ''
-  // 剥掉开头的 ::: kind 标记行
   const lines = raw.split('\n')
-  let idx = 0
-  while (idx < lines.length && /^:::\s*\w+/.test(lines[idx])) idx++
-  return lines.slice(idx).join('\n')
+  // 剥掉开头的 ::: blog-xxx 标记行（容器名可能含 -）
+  let start = 0
+  while (start < lines.length && /^:::\s*\S+/.test(lines[start])) start++
+  // 剥掉结尾的 ::: 闭合行
+  let end = lines.length
+  while (end > start && /^:::\s*$/.test(lines[end - 1])) end--
+  return lines.slice(start, end).join('\n')
 })
 </script>
 

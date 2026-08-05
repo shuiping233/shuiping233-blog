@@ -19,16 +19,21 @@ const props = defineProps<{
   node: VmrContainerNodeData
 }>()
 
-// 标题：::: details 后的参数（attrs.args），如「点击展开」
-const title = computed(() => props.node.attrs?.args ?? props.node.attrs?.title ?? '')
+// 标题：::: details 后的参数（attrs.args），如「点击展开」；未写标题默认「详情」
+const title = computed(() => props.node.attrs?.args ?? props.node.attrs?.title ?? '详情')
 
-// 容器内容：raw 剥掉第一行（::: details 标记）后的原始 markdown
+// 图标：Segoe Fluent 的「文档/展开」语义图标
+const headerIcon = '\uE8A5'
+
+// 容器内容：raw 剥掉首尾的 ::: details 标记行
 const innerMarkdown = computed(() => {
   const raw = props.node.raw ?? ''
   const lines = raw.split('\n')
-  let idx = 0
-  while (idx < lines.length && /^:::\s*details/i.test(lines[idx])) idx++
-  return lines.slice(idx).join('\n')
+  let start = 0
+  while (start < lines.length && /^:::\s*details/i.test(lines[start])) start++
+  let end = lines.length
+  while (end > start && /^:::\s*$/.test(lines[end - 1])) end--
+  return lines.slice(start, end).join('\n')
 })
 </script>
 
@@ -36,6 +41,7 @@ const innerMarkdown = computed(() => {
   <WinExpander
     class="blog-details"
     :Header="title"
+    :HeaderIcon="headerIcon"
     :IsExpanded="false">
     <div class="blog-details-content">
       <BlogMarkdown v-if="innerMarkdown" :content="innerMarkdown" />

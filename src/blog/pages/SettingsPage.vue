@@ -58,7 +58,7 @@ const onThemeSelectionChanged = ({ SelectedIndex }: { SelectedIndex: number }) =
   }
 
   .settings-root {
-    /* 不设最大宽度，充分利用屏幕空间 */
+    max-width: 880px;
     padding: 40px 48px 0;
   }
 

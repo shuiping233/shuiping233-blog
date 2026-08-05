@@ -25,7 +25,8 @@ function serveContentAssets(): Plugin {
     apply: 'serve',
     configureServer(server) {
       const middleware: Connect.NextHandleFunction = (req, res, next) => {
-        const url = (req.url ?? '').split('?')[0];
+        // URL 里的中文/空格是百分号编码的，需 decode 后才能匹配文件系统路径
+        const url = decodeURIComponent((req.url ?? '').split('?')[0]);
         let filePath: string | null = null;
         if (url.startsWith('/posts/image/')) {
           filePath = resolve(__dirname, 'docs', url.slice(1));

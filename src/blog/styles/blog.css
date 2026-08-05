@@ -146,6 +146,29 @@ body {
   color: var(--text-secondary, #9198a1);
 }
 
+/* ---- WinInfoBar 提示容器（blog-* admonition）----
+   内容统一放 content-area（slot），不传 Title/Message → 触发 no-banner-content，
+   使内容区与图标同行（row 1）；覆盖默认的居中/占位，保证与图标顶部对齐。 */
+.win-infobar.no-banner-content {
+  min-height: 0;
+}
+
+.win-infobar.no-banner-content .win-infobar-content-area {
+  align-self: center;
+  padding: 12px 16px 12px 0;
+  min-width: 0;
+}
+
+.win-infobar.no-banner-content .win-infobar-standard-icon-area {
+  margin: 12px 14px 12px 0;
+  align-self: start;
+}
+
+/* 隐藏空的 panel 占位（Title/Message 均为空时） */
+.win-infobar.no-banner-content .win-infobar-panel {
+  display: none;
+}
+
 /* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights dark ---- */
 .blog-markdown-body :not(pre) > code {
   padding: 0.2em 0.4em;

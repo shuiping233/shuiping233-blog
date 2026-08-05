@@ -35,8 +35,6 @@ const SEVERITY_MAP: Record<string, string> = {
 }
 
 const severity = computed(() => SEVERITY_MAP[props.node.name ?? ''] ?? 'Informational')
-// vmr_container 的标题在 attrs.args（::: blog-info 标题）
-const title = computed(() => props.node.attrs?.title ?? props.node.attrs?.args ?? '')
 
 // children 是 markdown 节点，用 raw 重新解析渲染最可靠
 const innerMarkdown = computed(() => {
@@ -56,9 +54,7 @@ const innerMarkdown = computed(() => {
   <WinInfoBar
     v-model:IsOpen="isOpen"
     :Severity="severity"
-    :IsClosable="false"
-    :Title="title"
-    Message="">
+    :IsClosable="false">
     <div class="blog-admonition-content">
       <BlogMarkdown v-if="innerMarkdown" :content="innerMarkdown" />
     </div>

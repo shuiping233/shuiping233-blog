@@ -14,7 +14,10 @@
       <div class="blog-page">
         <Transition name="blog-fade" mode="out-in">
           <HomePage v-if="currentPage === 'home'" key="home" @navigate="navigate" />
-          <OverviewPage v-else-if="currentPage === 'overview'" key="overview" @navigate="navigate" />
+          <OverviewPage v-else-if="currentPage === 'overview'" key="overview" @navigate="navigate"
+            @navigate-category="onNavigateCategory" />
+          <CategoryPage v-else-if="currentCategoryId" :key="currentCategoryId" :category-id="currentCategoryId"
+            @navigate="navigate" />
           <SettingsPage v-else-if="currentPage === 'settings'" key="settings" />
           <ArticlePage v-else-if="currentPost" :key="currentPost.slug" :post="currentPost" />
         </Transition>
@@ -35,6 +38,7 @@ import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
 import HomePage from './pages/HomePage.vue'
 import ArticlePage from './pages/ArticlePage.vue'
 import OverviewPage from './pages/OverviewPage.vue'
+import CategoryPage from './pages/CategoryPage.vue'
 const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
 import {
   categories,
@@ -89,13 +93,19 @@ const footerMenuItems: NavItem[] = [
 // ---- URL 路由（History 模式）----
 // /             → home
 // /overview     → 文章总览
+// /category/:id → 分类页（id 为分类 id，如 winui3/随笔）
 // /posts/:slug  → 文章（slug 为文件名，可能含中文/空格，需 encode/decode）
 // /settings     → settings
 const routeToTag = (path: string): string => {
   if (path === '/' || path === '') return 'home'
   if (path === '/overview') return 'overview'
   if (path === '/settings') return 'settings'
-  const m = path.match(/^\/posts\/(.+)$/)
+  let m = path.match(/^\/category\/(.+)$/)
+  if (m) {
+    const id = decodeURIComponent(m[1])
+    return categories.some((c) => c.id === id) ? `cat:${id}` : 'home'
+  }
+  m = path.match(/^\/posts\/(.+)$/)
   if (m) {
     const slug = decodeURIComponent(m[1])
     return getPost(slug) ? slug : 'home'
@@ -107,6 +117,7 @@ const tagToRoute = (tag: string): string => {
   if (tag === 'home') return '/'
   if (tag === 'overview') return '/overview'
   if (tag === 'settings') return '/settings'
+  if (tag.startsWith('cat:')) return `/category/${encodeURIComponent(tag.slice(4))}`
   return `/posts/${encodeURIComponent(tag)}`
 }
 
@@ -156,8 +167,17 @@ const onItemInvoked = (args: { InvokedItemContainer?: NavItem; IsSettingsInvoked
 
 const currentPost = computed(() => {
   if (currentPage.value === 'home' || currentPage.value === 'overview' || currentPage.value === 'settings') return null
+  if (currentPage.value.startsWith('cat:')) return null
   return getPost(currentPage.value) ?? null
 })
+
+// 当前分类页的分类 id（currentPage 为 cat:xxx 时）
+const currentCategoryId = computed(() =>
+  currentPage.value.startsWith('cat:') ? currentPage.value.slice(4) : null,
+)
+
+// 总览页「分类导航」点击 → 分类页
+const onNavigateCategory = (id: string) => navigate(`cat:${id}`)
 
 // ---- 侧栏顶部搜索 ----
 const searchText = ref('')

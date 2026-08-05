@@ -26,7 +26,7 @@
       <h2 class="overview-section-title">分类导航</h2>
       <div class="overview-cards">
         <button v-for="cat in categoryCards" :key="cat.id" class="overview-card" type="button"
-          @click="navigateTo(cat.firstSlug)">
+          @click="$emit('navigateCategory', cat.id)">
           <span class="icon overview-card-icon">{{ cat.icon }}</span>
           <div class="overview-card-body">
             <div class="overview-card-title">{{ cat.name }}</div>
@@ -57,13 +57,12 @@ import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
 import BlogFooter from '../components/BlogFooter.vue'
 import { categories, posts } from '../data/posts'
 
-defineEmits<{ navigate: [slug: string] }>()
+const emit = defineEmits<{ navigate: [slug: string]; navigateCategory: [id: string] }>()
 
 const categoryCards = computed(() =>
   categories.map((cat) => ({
     ...cat,
     postCount: posts.filter((p) => p.category === cat.id).length,
-    firstSlug: posts.find((p) => p.category === cat.id)?.slug ?? '',
   })),
 )
 
@@ -75,10 +74,6 @@ const recentPosts = computed(() =>
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
     .slice(0, 6),
 )
-
-const navigateTo = (slug: string) => {
-  if (slug) emit('navigate', slug)
-}
 </script>
 
 <style scoped>

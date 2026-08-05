@@ -1,8 +1,6 @@
 # shuiping233 Blog
 
-自研 WinUI 3 风格博客框架：Vue 3 + Vite + [WinUIonWeb](https://github.com/shuiping233/WinUIonWeb) 控件库（git submodule），Markdown 渲染用 [markstream-vue](https://github.com/Simon-He95/markstream-vue) + [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)。
-
-> 已彻底移除 VitePress，迁移细节见 [Migration.md](./Migration.md)。
+WinUI3 风格博客, 基于 Vue 3 + Vite + [WinUIonWeb](https://github.com/Furry-Xiyi/WinUIonWeb) 控件库（git submodule），Markdown 渲染用 [markstream-vue](https://github.com/Simon-He95/markstream-vue) + [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)。
 
 ## 环境配置
 
@@ -12,6 +10,7 @@ npx husky init
 ```
 
 > WinUIonWeb 控件库通过 git submodule 挂在 `winuionweb/`：
+>
 > ```bash
 > git submodule update --init --recursive
 > ```

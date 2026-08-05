@@ -1,19 +1,10 @@
 <script setup lang="ts">
-// 统一封装 MarkdownRender：注入全局自定义组件。
+// 统一封装 MarkdownRender。
+// 自定义组件覆盖（image/code_block/html_inline/vmr_container）在 main.ts 注册——
+// markstream 的注册表在渲染器初始化时快照，必须于 app.mount() 前完成。
 
-import MarkdownRender, { setCustomComponents } from 'markstream-vue'
+import MarkdownRender from 'markstream-vue'
 import { customMarkdownIt } from '../markdown'
-import CustomImageNode from './CustomImageNode.vue'
-import CustomCodeBlock from './CustomCodeBlock.vue'
-import CustomMediaPlayer from './CustomMediaPlayer.vue'
-import CustomDetails from './CustomDetails.vue'
-
-// 全局自定义组件覆盖（对 BlogMarkdown 内所有 MarkdownRender 生效）
-setCustomComponents({ image: CustomImageNode })
-setCustomComponents({ code_block: CustomCodeBlock })
-setCustomComponents({ html_inline: CustomMediaPlayer })
-// ::: details → WinExpander 折叠容器（vmr_container 覆盖）
-setCustomComponents({ vmr_container: CustomDetails })
 
 defineProps<{
   content: string

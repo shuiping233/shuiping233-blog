@@ -39,9 +39,11 @@ import WinTitleBar from 'winui/components/WinTitleBar.vue'
 import WinToolTipService from 'winui/components/WinToolTipService.vue'
 import WinNavigationView from 'winui/components/WinNavigationView.vue'
 import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
-// 页面懒加载：markstream-vue（约 650KB）只在进入对应页面时才下载
-const HomePage = defineAsyncComponent(() => import('./pages/HomePage.vue'))
-const ArticlePage = defineAsyncComponent(() => import('./pages/ArticlePage.vue'))
+// 页面加载：ArticlePage/HomePage 静态引入（markstream 自定义组件注册需与渲染
+// 在同一模块实例，懒加载会破坏 setCustomComponents 的全局注册生效）。
+// SettingsPage 无 markstream 依赖，保持懒加载。
+import HomePage from './pages/HomePage.vue'
+import ArticlePage from './pages/ArticlePage.vue'
 const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
 import {
   categories,

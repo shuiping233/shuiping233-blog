@@ -5,14 +5,16 @@
 
       <WinTextBlock class="settings-section-title" Text="外观" />
       <div class="settings-controls">
-        <div class="theme-row">
-          <WinTextBlock class="theme-label" Text="主题" />
+        <WinSettingsCard
+          Header="主题"
+          Description="选择应用颜色模式"
+          HeaderIcon="&#xE790;">
           <WinRadioButtons
             :SelectedIndex="0"
             MaxColumns="1">
             <WinRadioButton Content="深色" />
           </WinRadioButtons>
-        </div>
+        </WinSettingsCard>
       </div>
       <BlogFooter />
     </div>
@@ -22,6 +24,7 @@
 <script setup lang="ts">
 import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
 import WinTextBlock from 'winui/components/WinTextBlock.vue'
+import WinSettingsCard from 'winui/components/WinSettingsCard.vue'
 import WinRadioButtons from 'winui/components/WinRadioButtons.vue'
 import WinRadioButton from 'winui/components/WinRadioButton.vue'
 import BlogFooter from '../components/BlogFooter.vue'
@@ -56,27 +59,5 @@ import BlogFooter from '../components/BlogFooter.vue'
     gap: 8px;
     /* 与 footer 的间距 */
     padding-bottom: 48px;
-  }
-
-  .theme-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 16px;
-    border: 1px solid var(--card-stroke, rgba(0, 0, 0, 0.08));
-    border-radius: 8px;
-    background: var(--card-bg, rgba(255, 255, 255, 0.5));
-  }
-
-  html.theme-dark .theme-row,
-  html.dark .theme-row {
-    --card-bg: rgba(255, 255, 255, 0.04);
-    --card-stroke: rgba(255, 255, 255, 0.1);
-  }
-
-  .theme-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
   }
 </style>

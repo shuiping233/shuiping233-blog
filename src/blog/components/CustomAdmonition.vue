@@ -1,0 +1,72 @@
+<script setup lang="ts">
+// 自定义提示容器：markdown 里的 ::: tip/warning/danger 等（admonition 节点）
+// 经 BlogMarkdown 的 postTransformNodes 转换为 vmr_container（name=kind），
+// 这里用 WinInfoBar 渲染。
+// Severity 映射: info/tip/note → Informational, warning/caution → Warning,
+//               danger/error → Error, success → Success
+
+import { ref, computed } from 'vue'
+import WinInfoBar from 'winui/components/WinInfoBar.vue'
+import BlogMarkdown from './BlogMarkdown.vue'
+
+interface VmrContainerNodeData {
+  type: 'vmr_container'
+  name: string
+  attrs?: Record<string, string>
+  children: unknown[]
+  raw?: string
+}
+
+const props = defineProps<{
+  node: VmrContainerNodeData
+}>()
+
+const isOpen = ref(true)
+
+const SEVERITY_MAP: Record<string, string> = {
+  info: 'Informational',
+  tip: 'Informational',
+  note: 'Informational',
+  caution: 'Warning',
+  warning: 'Warning',
+  danger: 'Error',
+  error: 'Error',
+  success: 'Success',
+}
+
+const severity = computed(() => SEVERITY_MAP[props.node.name ?? ''] ?? 'Informational')
+const title = computed(() => props.node.attrs?.title ?? '')
+
+// children 是 markdown 节点，用 raw 重新解析渲染最可靠
+const innerMarkdown = computed(() => {
+  const raw = props.node.raw ?? ''
+  // 剥掉开头的 ::: kind 标记行
+  const lines = raw.split('\n')
+  let idx = 0
+  while (idx < lines.length && /^:::\s*\w+/.test(lines[idx])) idx++
+  return lines.slice(idx).join('\n')
+})
+</script>
+
+<template>
+  <WinInfoBar
+    v-model:IsOpen="isOpen"
+    :Severity="severity"
+    :IsClosable="false"
+    :Title="title"
+    Message="">
+    <div class="blog-admonition-content">
+      <BlogMarkdown v-if="innerMarkdown" :content="innerMarkdown" />
+    </div>
+  </WinInfoBar>
+</template>
+
+<style scoped>
+  .win-infobar {
+    margin: var(--ms-flow-codeblock-y, 16px) 0;
+  }
+
+  .blog-admonition-content {
+    padding-top: 4px;
+  }
+</style>

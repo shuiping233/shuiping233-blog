@@ -1,11 +1,7 @@
 <template>
   <WinScrollViewer class="home-scroll blog-page-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
     <div class="home-root blog-page-root">
-      <MarkdownRender
-        class="blog-markdown-body markdown-body"
-        custom-id="blog"
-        :content="content"
-        :custom-markdown-it="customMarkdownIt" />
+      <BlogMarkdown :content="content" />
       <BlogFooter />
     </div>
   </WinScrollViewer>
@@ -13,9 +9,8 @@
 
 <script setup lang="ts">
 import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
-import MarkdownRender from 'markstream-vue'
+import BlogMarkdown from '../components/BlogMarkdown.vue'
 import { homeContent } from '../data/posts'
-import { customMarkdownIt } from '../markdown'
 import BlogFooter from '../components/BlogFooter.vue'
 
 // 首页内容直接渲染 docs/index.md（欢迎语 + 项目列表）

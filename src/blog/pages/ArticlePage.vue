@@ -7,11 +7,7 @@
       </div>
       <h1 class="page-header">{{ post.title }}</h1>
       <WinRichTextBlock class="article-rich" IsTextSelectionEnabled>
-        <MarkdownRender
-          class="blog-markdown-body markdown-body"
-          custom-id="blog"
-          :content="content"
-          :custom-markdown-it="customMarkdownIt" />
+        <BlogMarkdown :content="content" />
       </WinRichTextBlock>
       <BlogFooter />
     </article>
@@ -22,10 +18,9 @@
 import { computed } from 'vue'
 import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
 import WinRichTextBlock from 'winui/components/WinRichTextBlock.vue'
-import MarkdownRender from 'markstream-vue'
+import BlogMarkdown from '../components/BlogMarkdown.vue'
 import type { BlogPost } from '../data/posts'
 import { categories, getPostContent } from '../data/posts'
-import { customMarkdownIt } from '../markdown'
 import BlogFooter from '../components/BlogFooter.vue'
 
 const props = defineProps<{

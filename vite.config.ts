@@ -82,6 +82,11 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    watch: {
+      // .vscode-edge-debug 是 VS Code Edge 调试器（F5）留下的 profile/session，
+      // 文件被 Edge 进程锁定，chokidar watch 会 EBUSY 崩溃，需忽略
+      ignored: ['**/.vscode-edge-debug/**', '**/.reasonix/**'],
+    },
   },
   build: {
     outDir: 'dist',

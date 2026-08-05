@@ -38,5 +38,6 @@ defineProps<{
     custom-id="blog"
     :content="content"
     :custom-markdown-it="customMarkdownIt"
-    :viewport-priority="false" />
+    :viewport-priority="false"
+    :show-tooltips="false" />
 </template>

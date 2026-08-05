@@ -1,0 +1,3 @@
+[submodule "winuionweb"]
+	path = winuionweb
+	url = git@github.com:shuiping233/WinUIonWeb.git

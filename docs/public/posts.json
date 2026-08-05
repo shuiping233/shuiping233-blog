@@ -26,6 +26,10 @@
   "2026-08-05": {
     "updated": [
       {
+        "title": "第一篇文章",
+        "path": "/posts/hello"
+      },
+      {
         "title": "WinUI3应用把AI相关内容砍掉以减少打包体积",
         "path": "/posts/WinUI3应用把AI相关内容砍掉以减少打包体积"
       }
@@ -33,14 +37,6 @@
   },
   "2026-04-02": {
     "created": [
-      {
-        "title": "第一篇文章",
-        "path": "/posts/hello"
-      }
-    ]
-  },
-  "2026-04-14": {
-    "updated": [
       {
         "title": "第一篇文章",
         "path": "/posts/hello"

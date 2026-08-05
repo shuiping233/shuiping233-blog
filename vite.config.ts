@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin, type Connect } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import compression from 'vite-plugin-compression';
 import { createReadStream, cpSync, existsSync, statSync } from 'node:fs';
 import { extname, resolve } from 'node:path';
 
@@ -74,7 +75,22 @@ function copyContentAssets(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), serveContentAssets(), copyContentAssets()],
+  plugins: [
+    vue(),
+    // Gzip 压缩（沿用 vitepress 时代的配置：level 9, threshold 5KB, ext .gz）
+    compression({
+      verbose: true,
+      disable: false,
+      threshold: 5 * 1024,
+      algorithm: 'gzip',
+      ext: '.gz',
+      compressionOptions: {
+        level: 9,
+      },
+    }),
+    serveContentAssets(),
+    copyContentAssets(),
+  ],
   resolve: {
     alias: {
       // WinUIonWeb 控件库（submodule）源码根，抹平 仓库根/WinUIonWeb/src 三层嵌套

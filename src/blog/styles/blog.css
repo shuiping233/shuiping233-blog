@@ -128,3 +128,23 @@ html.dark .blog-markdown-body pre {
 .blog-markdown-body blockquote {
   color: var(--text-secondary, #6b6b6b);
 }
+
+/* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights ----
+   github-markdown.css 默认是浅色背景(#818b981f)，暗色下偏淡看不清，
+   这里按 GitHub light/dark 值显式覆盖。 */
+.blog-markdown-body :not(pre) > code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #818b981f;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  color: inherit;
+}
+
+html.theme-dark .blog-markdown-body :not(pre) > code,
+html.dark .blog-markdown-body :not(pre) > code {
+  background-color: #656c7633;
+  color: #f0f6fc;
+}

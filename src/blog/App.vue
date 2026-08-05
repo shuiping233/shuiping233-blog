@@ -111,53 +111,38 @@ const footerMenuItems: NavItem[] = [
 // /category/:id → 分类页（id 为分类 id，如 winui3/随笔）
 // /posts/:slug  → 文章（slug 为文件名，可能含中文/空格，需 encode/decode）
 // /settings     → settings
-//
-// 404 处理（服务器 SPA 兜底时）：
-// 路径完全匹配 → 正常路由
-// 顶层路由追加后缀（/overview/123、/category/xx/123）→ 保留前缀页 + 标记前缀匹配（弹窗）
-// 其他无效路径（含 /posts/:slug 加后缀）→ 回首页 + 标记 404
-const resolveRoute = (path: string): { tag: string; isPrefixMatch: boolean } => {
-  const exact = (p: string): string | null => {
-    if (p === '/' || p === '') return 'home'
-    if (p === '/overview') return 'overview'
-    if (p === '/settings') return 'settings'
-    let m = p.match(/^\/category\/(.+)$/)
-    if (m) {
-      const id = decodeURIComponent(m[1])
-      return categories.some((c) => c.id === id) ? `cat:${id}` : null
-    }
-    m = p.match(/^\/posts\/(.+)$/)
-    if (m) {
-      const slug = decodeURIComponent(m[1])
-      return getPost(slug) ? slug : null
-    }
-    return null
+const routeToTag = (path: string): string => {
+  if (path === '/' || path === '') return 'home'
+  if (path === '/overview') return 'overview'
+  if (path === '/settings') return 'settings'
+  let m = path.match(/^\/category\/(.+)$/)
+  if (m) {
+    const id = decodeURIComponent(m[1])
+    return categories.some((c) => c.id === id) ? `cat:${id}` : 'home'
   }
-
-  // 完全匹配
-  const tag = exact(path)
-  if (tag) return { tag, isPrefixMatch: false }
-
-  // 顶层路由前缀匹配：/overview/xxx、/settings/xxx、/category/:id/xxx → 保留前缀页
-  const prefixTags = ['/overview', '/settings']
-  for (const prefix of prefixTags) {
-    if (path.startsWith(prefix + '/')) {
-      return { tag: exact(prefix)!, isPrefixMatch: true }
-    }
+  m = path.match(/^\/posts\/(.+)$/)
+  if (m) {
+    const slug = decodeURIComponent(m[1])
+    return getPost(slug) ? slug : 'home'
   }
-  const catMatch = path.match(/^\/category\/([^/]+)\//)
-  if (catMatch) {
-    const id = decodeURIComponent(catMatch[1])
-    if (categories.some((c) => c.id === id)) {
-      return { tag: `cat:${id}`, isPrefixMatch: true }
-    }
-  }
-
-  // 完全无效 → 回首页
-  return { tag: 'home', isPrefixMatch: true }
+  return 'home'
 }
 
-const routeToTag = (path: string): string => resolveRoute(path).tag
+// 判断路径是否为已知路由（用于 404 检测）
+const isKnownPath = (path: string): boolean => {
+  if (path === '/' || path === '' || path === '/overview' || path === '/settings') return true
+  let m = path.match(/^\/category\/(.+)$/)
+  if (m) {
+    const id = decodeURIComponent(m[1])
+    return categories.some((c) => c.id === id)
+  }
+  m = path.match(/^\/posts\/(.+)$/)
+  if (m) {
+    const slug = decodeURIComponent(m[1])
+    return Boolean(getPost(slug))
+  }
+  return false
+}
 
 const tagToRoute = (tag: string): string => {
   if (tag === 'home') return '/'
@@ -170,25 +155,19 @@ const tagToRoute = (tag: string): string => {
 // 初始加载：从当前 URL 恢复页面状态（支持刷新/直达文章页）
 const currentPage = ref<string>(routeToTag(window.location.pathname))
 
-// ---- 404 检测：路径不合法时（服务器 SPA 兜底），弹框提示 ----
+// ---- 404 检测：路径不是已知路由时（服务器 SPA 兜底），弹框提示 ----
 const notFoundPath = ref<string>('')
 const notFoundDialogOpen = ref(false)
-const notFoundTarget = ref<string>('/') // 弹框确定后跳转的目标（前缀页或首页）
 
-{
-  const resolved = resolveRoute(window.location.pathname)
-  if (resolved.isPrefixMatch) {
-    // 完全无效或前缀匹配 → 弹框；当前页保留前缀页（顶层路由后缀场景）或首页
-    notFoundPath.value = window.location.pathname
-    notFoundDialogOpen.value = true
-    notFoundTarget.value = tagToRoute(resolved.tag)
-  }
+if (!isKnownPath(window.location.pathname)) {
+  notFoundPath.value = window.location.pathname
+  notFoundDialogOpen.value = true
 }
 
-// 点击「确定」跳转（前缀页或首页）
+// 点击「确定」回到首页
 const onNotFoundConfirm = () => {
   notFoundDialogOpen.value = false
-  navigate(notFoundTarget.value === '/' ? '/' : notFoundTarget.value)
+  navigate('/')
 }
 
 // 浏览器前进/后退：URL 变化时同步页面

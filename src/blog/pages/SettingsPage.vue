@@ -58,8 +58,8 @@ const onThemeSelectionChanged = ({ SelectedIndex }: { SelectedIndex: number }) =
   }
 
   .settings-root {
-    max-width: 880px;
-    padding: 40px 48px 64px;
+    /* 不设最大宽度，充分利用屏幕空间 */
+    padding: 40px 48px 0;
   }
 
   .settings-root .page-header {
@@ -77,5 +77,7 @@ const onThemeSelectionChanged = ({ SelectedIndex }: { SelectedIndex: number }) =
     display: flex;
     flex-direction: column;
     gap: 8px;
+    /* 与 footer 的间距 */
+    padding-bottom: 48px;
   }
 </style>

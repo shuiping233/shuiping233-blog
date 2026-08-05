@@ -74,6 +74,8 @@ body {
 /* 首页/文章内容不参与 flex 撑高，保持原有块级流式布局 */
 .blog-page-scroll .blog-page-root .blog-markdown-body {
   flex: 0 0 auto;
+  /* 与 footer 的间距 */
+  padding-bottom: 48px;
 }
 
 .blog-markdown-body :is(h1, h2, h3, h4, h5, h6) {

@@ -41,8 +41,8 @@ const content = computed(() => getPostContent(props.post.slug))
   }
 
   .article-root {
-    max-width: 880px;
-    padding: 40px 48px 64px;
+    /* 不设最大宽度，充分利用屏幕空间 */
+    padding: 40px 48px 0;
   }
 
   .article-meta {
@@ -73,7 +73,8 @@ const content = computed(() => getPostContent(props.post.slug))
   }
 
   /* WinRichTextBlock 作为富文本容器：接管 markstream 的样式，
-     屏蔽其自带 p/a 默认样式干扰 markstream 渲染 */
+     屏蔽其自带 p/a 默认样式干扰 markstream 渲染；
+     与 footer 的间距由 blog.css 的 .blog-markdown-body padding-bottom 统一处理 */
   .article-rich {
     display: block;
     width: 100%;

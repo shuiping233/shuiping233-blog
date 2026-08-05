@@ -48,6 +48,34 @@ body {
   max-width: none;
 }
 
+/* ---- sticky footer：内容不足一屏时贴底，超长时随内容滚动 ----
+   .blog-page-scroll 是 WinScrollViewer（滚动容器），
+   .scroll-content 是其内部滚动内容（控件全局类）。
+   min-height: 100% 让内容至少撑满视口；flex column + 内容区 flex:1
+   把 footer 用 margin-top:auto 吸到底部；内容超长时 min-height 失效正常滚动。 */
+.blog-page-scroll .scroll-content {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-page-scroll .blog-page-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.blog-page-scroll .blog-page-root .blog-footer {
+  margin-top: auto;
+}
+
+/* 首页/文章内容不参与 flex 撑高，保持原有块级流式布局 */
+.blog-page-scroll .blog-page-root .blog-markdown-body {
+  flex: 0 0 auto;
+}
+
 .blog-markdown-body :is(h1, h2, h3, h4, h5, h6) {
   border-bottom: none;
   margin-top: 24px;

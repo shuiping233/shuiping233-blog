@@ -1,6 +1,6 @@
 <template>
-  <WinScrollViewer class="article-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
-    <article class="article-root">
+  <WinScrollViewer class="article-scroll blog-page-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+    <article class="article-root blog-page-root">
       <div class="article-meta">
         <span class="article-category">{{ categoryName }}</span>
         <span v-if="post.date" class="article-date">{{ post.date }}</span>

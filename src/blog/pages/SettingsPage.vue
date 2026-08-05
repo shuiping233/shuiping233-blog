@@ -1,6 +1,6 @@
 <template>
-  <WinScrollViewer class="settings-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
-    <div class="settings-root">
+  <WinScrollViewer class="settings-scroll blog-page-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+    <div class="settings-root blog-page-root">
       <h1 class="page-header">设置</h1>
 
       <WinTextBlock class="settings-section-title" Text="外观" />

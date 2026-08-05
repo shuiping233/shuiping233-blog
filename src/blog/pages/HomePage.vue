@@ -1,6 +1,6 @@
 <template>
-  <WinScrollViewer class="home-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
-    <div class="home-root">
+  <WinScrollViewer class="home-scroll blog-page-scroll" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
+    <div class="home-root blog-page-root">
       <MarkdownRender
         class="blog-markdown-body markdown-body"
         custom-id="blog"

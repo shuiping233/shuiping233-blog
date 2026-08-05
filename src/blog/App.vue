@@ -1,6 +1,15 @@
 <template>
   <WinTitleBar :title="appTitle" theme="dark" />
   <WinToolTipService />
+  <!-- 404 提示：访问不存在的路径时（服务器 SPA 兜底），弹框告知并引导回首页 -->
+  <WinContentDialog
+    v-model:IsOpen="notFoundDialogOpen"
+    Title="页面不存在"
+    PrimaryButtonText="确定"
+    DefaultButton="Primary"
+    @PrimaryButtonClick="onNotFoundConfirm">
+    <WinTextBlock :Text="`找不到路径 ${notFoundPath} 的内容`" TextWrapping="WrapWholeWords" />
+  </WinContentDialog>
   <div class="blog-app-content" :class="{ 'has-titlebar': titleBarActive }">
     <WinNavigationView :SelectedItem="selectedItem" PaneDisplayMode="Auto" :MenuItems="menuItems"
       :FooterMenuItems="footerMenuItems" :IsSettingsVisible="false" IsBackButtonVisible="Collapsed"
@@ -41,6 +50,8 @@ import CategoryPage from './pages/CategoryPage.vue'
 // ArticlePage 懒加载：只有它用 markstream（约 650KB），首页/总览/分类页不加载
 const ArticlePage = defineAsyncComponent(() => import('./pages/ArticlePage.vue'))
 const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
+import WinContentDialog from 'winui/components/WinContentDialog.vue'
+import WinTextBlock from 'winui/components/WinTextBlock.vue'
 import {
   categories,
   posts,
@@ -117,6 +128,22 @@ const routeToTag = (path: string): string => {
   return 'home'
 }
 
+// 判断路径是否为已知路由（用于 404 检测）
+const isKnownPath = (path: string): boolean => {
+  if (path === '/' || path === '' || path === '/overview' || path === '/settings') return true
+  let m = path.match(/^\/category\/(.+)$/)
+  if (m) {
+    const id = decodeURIComponent(m[1])
+    return categories.some((c) => c.id === id)
+  }
+  m = path.match(/^\/posts\/(.+)$/)
+  if (m) {
+    const slug = decodeURIComponent(m[1])
+    return Boolean(getPost(slug))
+  }
+  return false
+}
+
 const tagToRoute = (tag: string): string => {
   if (tag === 'home') return '/'
   if (tag === 'overview') return '/overview'
@@ -127,6 +154,21 @@ const tagToRoute = (tag: string): string => {
 
 // 初始加载：从当前 URL 恢复页面状态（支持刷新/直达文章页）
 const currentPage = ref<string>(routeToTag(window.location.pathname))
+
+// ---- 404 检测：路径不是已知路由时（服务器 SPA 兜底），弹框提示 ----
+const notFoundPath = ref<string>('')
+const notFoundDialogOpen = ref(false)
+
+if (!isKnownPath(window.location.pathname)) {
+  notFoundPath.value = window.location.pathname
+  notFoundDialogOpen.value = true
+}
+
+// 点击「确定」回到首页
+const onNotFoundConfirm = () => {
+  notFoundDialogOpen.value = false
+  navigate('/')
+}
 
 // 浏览器前进/后退：URL 变化时同步页面
 window.addEventListener('popstate', () => {

@@ -39,31 +39,46 @@ const copyActiveCode = async () => {
   }
 }
 
-// ---- 轻量语法着色：关键字/字符串/注释/数字 ----
-const keywordRe = /\b(import|from|export|default|const|let|var|function|return|if|else|for|while|class|new|async|await|interface|type|extends|implements|public|private|protected|static|readonly|switch|case|break|continue|try|catch|finally|throw|using|package|include|namespace|def|self|print|true|false|null|undefined|void|bool|int|string|float|double|char|long|short|struct|enum|template|typename|using|this|super|yield|with|do|in|of|as|is|typeof|instanceof|delete|void|symbol|bigint|record|keyof|infer)\b/
-const numberRe = /\b\d[\d_]*(\.\d+)?\b/
-const stringRe = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/
-const commentRe = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/|#[^\n]*|--[^\n]*)/
+// ---- 轻量语法着色：单次扫描 tokenizer ----
+// 绝不对已生成的 HTML 再跑正则（会互相污染，见 tok-str 错乱 bug）。
+// 按 注释→字符串→数字→关键字 顺序，一次扫描用 indexOf 定位最近 token。
+const TOKEN_RULES: { type: string; re: RegExp }[] = [
+  { type: 'com', re: /\/\/[^\n]*|\/\*[\s\S]*?\*\/|#[^\n]*|--[^\n]*/ },
+  { type: 'str', re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/ },
+  { type: 'num', re: /\b\d[\d_]*(\.\d+)?\b/ },
+  { type: 'kw', re: /\b(import|from|export|default|const|let|var|function|return|if|else|for|while|class|new|async|await|interface|type|extends|implements|public|private|protected|static|readonly|switch|case|break|continue|try|catch|finally|throw|using|package|include|namespace|def|self|print|true|false|null|undefined|void|bool|int|string|float|double|char|long|short|struct|enum|template|typename|this|super|yield|with|do|in|of|as|is|typeof|instanceof|delete|symbol|bigint|record|keyof|infer|echo|let)\b/ },
+]
 
-// 单行着色：按 注释→字符串→关键字→数字 顺序替换，避免重复匹配
+const escapeHtml = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
 function highlightLine(line: string): string {
-  // 简单实现：先处理字符串与注释（整体包裹），再对剩余部分做关键字/数字着色。
-  // 不做完整 tokenizer，够用于博客代码块展示。
-  const escaped = line
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-
-  let result = escaped
-  // 字符串
-  result = result.replace(stringRe, (m) => `<span class="tok-str">${m}</span>`)
-  // 注释（# 前缀的行内注释，仅当行首或前置空格）
-  result = result.replace(commentRe, (m) => `<span class="tok-com">${m}</span>`)
-  // 关键字
-  result = result.replace(keywordRe, (m) => `<span class="tok-kw">${m}</span>`)
-  // 数字
-  result = result.replace(numberRe, (m) => `<span class="tok-num">${m}</span>`)
-  return result
+  let pos = 0
+  let out = ''
+  while (pos < line.length) {
+    // 找当前剩余文本里位置最早的 token
+    let best: { index: number; len: number; type: string } | null = null
+    for (const rule of TOKEN_RULES) {
+      rule.re.lastIndex = 0
+      const m = rule.re.exec(line.slice(pos))
+      if (m && m.index >= 0) {
+        if (!best || m.index < best.index) {
+          best = { index: m.index, len: m[0].length, type: rule.type }
+        }
+      }
+    }
+    if (!best) {
+      out += escapeHtml(line.slice(pos))
+      break
+    }
+    // 前置普通文本
+    if (best.index > 0) out += escapeHtml(line.slice(pos, pos + best.index))
+    // token 本体
+    const token = line.slice(pos + best.index, pos + best.index + best.len)
+    out += `<span class="tok-${best.type}">${escapeHtml(token)}</span>`
+    pos += best.index + best.len
+  }
+  return out
 }
 
 const highlighted = computed(() => lines.value.map(highlightLine))

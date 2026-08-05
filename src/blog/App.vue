@@ -67,6 +67,7 @@ interface NavItem {
   Icon?: string
   Content: string
   SelectsOnInvoked?: boolean
+  ToolTip?: string // hover tooltip（WinNavigationView 的 itemToolTipAttrs 读取）
   MenuItems?: NavItem[]
 }
 
@@ -81,7 +82,9 @@ const menuItems = computed<NavItem[]>(() => [
     // 点击分类项：既展开子文章，也跳转分类列表页（SelectsOnInvoked 默认 true）
     MenuItems: getPostsByCategory(cat.id).map((post) => ({
       Tag: post.slug,
+      Icon: '\uF000', // 文件图标（Document）
       Content: post.title,
+      ToolTip: post.title, // hover 显示完整标题（长标题被截断时）
     })),
   })),
 ])

@@ -11,6 +11,7 @@ import CustomImageNode from './CustomImageNode.vue'
 import CustomCodeBlock from './CustomCodeBlock.vue'
 import CustomMediaPlayer from './CustomMediaPlayer.vue'
 import CustomContainerRouter from './CustomContainerRouter.vue'
+import CustomLink from './CustomLink.vue'
 
 // 模块顶层注册（与渲染同模块实例）。setCustomComponents 是【覆盖】非【合并】，
 // 必须一次传全部键；且每次 MarkdownRender 挂载前重新注册，确保注册表最新。
@@ -20,6 +21,7 @@ const registerCustomComponents = () => {
     code_block: CustomCodeBlock,
     html_inline: CustomMediaPlayer,
     vmr_container: CustomContainerRouter,
+    link: CustomLink,
   })
 }
 registerCustomComponents()

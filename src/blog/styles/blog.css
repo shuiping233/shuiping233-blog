@@ -3,7 +3,7 @@
 @font-face {
   font-family: 'WinUIOnWebIcons';
   src: url('winui/assets/Fonts/SEGOEICONS.TTF') format('truetype');
-  font-display: block;
+  font-display: swap; /* 文本先显示, 图标字体加载后替换(Lighthouse 建议) */
 }
 
 body .icon,

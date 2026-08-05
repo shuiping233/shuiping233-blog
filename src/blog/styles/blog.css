@@ -94,8 +94,9 @@ body {
 /* ---- 深色模式：markstream 代码块 ----
    markstream 的深色变量绑定在 .dark / .markstream-vue.dark 选择器上，
    而我们的主题类是 html.theme-dark，导致深色下代码块仍用浅色变量（白底）。
-   这里把 markstream 的深色变量在 html.theme-dark 下重绑定。 */
-html.theme-dark .blog-markdown-body .markstream-vue {
+   注意：markstream-vue 与 blog-markdown-body 是同一元素（Vue class 合并到根 div），
+   必须用「同级」选择器（无空格），不能用后代选择器。 */
+html.theme-dark .blog-markdown-body.markstream-vue {
   --ms-background: 0 0% 7%;
   --ms-foreground: 0 0% 93%;
   --ms-muted: 0 0% 12%;

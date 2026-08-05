@@ -167,6 +167,13 @@ body {
   align-self: start;
 }
 
+/* 图标字形在 16px 行高内偏上（Segoe 图标字体基线问题），
+   增大行高把字形在行框内下压，与同行文本视觉对齐（实测 35px 正好）。
+   注意：WinInfoBar 给 span 内联了 line-height:16px，需 !important 覆盖。 */
+.win-infobar.no-banner-content .win-infobar-standard-icon-area :deep(.win-infobar-standard-icon) {
+  line-height: 35px !important;
+}
+
 /* 隐藏空的 panel 占位（Title/Message 均为空时） */
 .win-infobar.no-banner-content .win-infobar-panel {
   display: none;

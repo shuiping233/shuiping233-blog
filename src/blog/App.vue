@@ -34,14 +34,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, provide } from 'vue'
+import { ref, computed, watch, provide, defineAsyncComponent } from 'vue'
 import WinTitleBar from 'winui/components/WinTitleBar.vue'
 import WinToolTipService from 'winui/components/WinToolTipService.vue'
 import WinNavigationView from 'winui/components/WinNavigationView.vue'
 import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
-import HomePage from './pages/HomePage.vue'
-import ArticlePage from './pages/ArticlePage.vue'
-import SettingsPage from './pages/SettingsPage.vue'
+// 页面懒加载：markstream-vue（约 650KB）只在进入对应页面时才下载
+const HomePage = defineAsyncComponent(() => import('./pages/HomePage.vue'))
+const ArticlePage = defineAsyncComponent(() => import('./pages/ArticlePage.vue'))
+const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
 import {
   categories,
   posts,

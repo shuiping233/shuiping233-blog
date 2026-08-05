@@ -131,6 +131,12 @@ body {
   list-style-type: square;
 }
 
+/* 有序列表 marker（1. 2. 3.）：同样被 markstream 的 ol>.list-item[data-v]::marker
+   覆盖，!important 强制颜色 */
+.blog-markdown-body ol > li::marker {
+  color: var(--fgColor-default, var(--color-fg-default, #f0f6fc)) !important;
+}
+
 .blog-markdown-body img {
   max-width: 100%;
 }

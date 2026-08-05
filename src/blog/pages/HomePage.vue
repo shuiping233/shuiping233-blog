@@ -19,7 +19,8 @@
       </div>
 
       <!-- 项目列表 -->
-      <WinTextBlock class="home-section-title" Text="我编写/参与过的项目" />
+      <h2 class="home-section-title">我编写/参与过的项目</h2>
+      <hr class="home-divider" />
       <div class="project-grid">
         <a
           v-for="p in projects"
@@ -88,7 +89,13 @@ import { projects } from '../data/projects'
     font-size: 18px;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 24px 0 16px;
+    margin: 24px 0 0;
+  }
+
+  .home-divider {
+    border: none;
+    border-top: 1px solid var(--card-stroke, rgba(0, 0, 0, 0.08));
+    margin: 16px 0;
   }
 
   .project-grid {

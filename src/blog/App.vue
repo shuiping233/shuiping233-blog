@@ -25,6 +25,7 @@
       <div class="blog-page">
         <Transition name="blog-fade" mode="out-in">
           <HomePage v-if="currentPage === 'home'" key="home" @navigate="navigate" />
+          <OverviewPage v-else-if="currentPage === 'overview'" key="overview" @navigate="navigate" />
           <SettingsPage v-else-if="currentPage === 'settings'" key="settings" />
           <ArticlePage v-else-if="currentPost" :key="currentPost.slug" :post="currentPost" />
         </Transition>
@@ -44,6 +45,7 @@ import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
 // SettingsPage 无 markstream 依赖，保持懒加载。
 import HomePage from './pages/HomePage.vue'
 import ArticlePage from './pages/ArticlePage.vue'
+import OverviewPage from './pages/OverviewPage.vue'
 const SettingsPage = defineAsyncComponent(() => import('./pages/SettingsPage.vue'))
 import {
   categories,
@@ -114,6 +116,7 @@ interface NavItem {
 // ---- 侧栏菜单：首页 + 分类（展开即文章标题），底部置顶「设置」 ----
 const menuItems = computed<NavItem[]>(() => [
   { Tag: 'home', Icon: '\uE80F', Content: '首页' },
+  { Tag: 'overview', Icon: '\uE9D2', Content: '总览' },
   ...categories.map((cat) => ({
     Tag: `cat:${cat.id}`,
     Icon: cat.icon,
@@ -132,10 +135,12 @@ const footerMenuItems: NavItem[] = [
 
 // ---- URL 路由（History 模式）----
 // /             → home
+// /overview     → 总览
 // /posts/:slug  → 文章（slug 为文件名，可能含中文/空格，需 encode/decode）
 // /settings     → settings
 const routeToTag = (path: string): string => {
   if (path === '/' || path === '') return 'home'
+  if (path === '/overview') return 'overview'
   if (path === '/settings') return 'settings'
   const m = path.match(/^\/posts\/(.+)$/)
   if (m) {
@@ -147,6 +152,7 @@ const routeToTag = (path: string): string => {
 
 const tagToRoute = (tag: string): string => {
   if (tag === 'home') return '/'
+  if (tag === 'overview') return '/overview'
   if (tag === 'settings') return '/settings'
   return `/posts/${encodeURIComponent(tag)}`
 }
@@ -196,7 +202,7 @@ const onItemInvoked = (args: { InvokedItemContainer?: NavItem; IsSettingsInvoked
 }
 
 const currentPost = computed(() => {
-  if (currentPage.value === 'home' || currentPage.value === 'settings') return null
+  if (currentPage.value === 'home' || currentPage.value === 'overview' || currentPage.value === 'settings') return null
   return getPost(currentPage.value) ?? null
 })
 

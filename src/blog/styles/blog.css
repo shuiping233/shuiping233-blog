@@ -194,14 +194,16 @@ body {
   color: #f0f6fc;
 }
 
-/* ---- 链接样式：蓝色 + 下划线（GitHub dark 风格）---- */
+/* ---- 链接样式：蓝色 + 下划线（GitHub dark 风格）----
+   注意：github-markdown/markstream 的 a 规则会覆盖 text-decoration，
+   用 !important 强制下划线。 */
 .blog-markdown-body a {
   color: #4493f8;
-  text-decoration: underline;
+  text-decoration: underline !important;
   text-underline-offset: 2px;
 }
 
 .blog-markdown-body a:hover {
   color: #79c0ff;
-  text-decoration: underline;
+  text-decoration: underline !important;
 }

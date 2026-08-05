@@ -26,6 +26,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
+    "serve": "node scripts/serve.mjs",
     "prepare": "husky",
     "img:conv": "tsx scripts/convert-webp.ts",
     "md:metadata": "tsx scripts/add-md-metadata.ts",

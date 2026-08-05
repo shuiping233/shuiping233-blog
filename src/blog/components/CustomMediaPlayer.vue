@@ -33,7 +33,7 @@ const isVideo = computed(() => (props.node.tag ?? '').toLowerCase() === 'video')
     v-if="isVideo && parsed.src"
     :Source="parsed.src"
     MaxWidth="100%"
-    AutoPlay="False"
+    :AutoPlay="false"
     :AreTransportControlsEnabled="true" />
   <div
     v-else

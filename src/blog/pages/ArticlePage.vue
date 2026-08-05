@@ -3,7 +3,9 @@
     <article class="article-root blog-page-root">
       <div class="article-meta">
         <span class="article-category">{{ categoryName }}</span>
-        <span v-if="post.date" class="article-date">{{ post.date }}</span>
+        <span v-if="post.date" class="article-meta-item">📅 {{ post.date }}</span>
+        <span v-if="post.updateAt && post.updateAt !== post.date" class="article-meta-item">🔄 {{ post.updateAt }}</span>
+        <span v-if="post.words" class="article-meta-item">📝 {{ post.words }} 字</span>
       </div>
       <h1 class="page-header">{{ post.title }}</h1>
       <WinRichTextBlock class="article-rich" IsTextSelectionEnabled>
@@ -64,9 +66,10 @@ const content = computed(() => getPostContent(props.post.slug))
     border-radius: 10px;
   }
 
-  .article-date {
+  .article-meta-item {
     font-size: 12px;
     color: var(--text-tertiary);
+    white-space: nowrap;
   }
 
   .article-root .page-header {

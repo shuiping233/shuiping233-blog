@@ -13,6 +13,8 @@ export interface BlogPost {
   title: string
   category: string // 所属分类 id
   date: string // createAt 或空
+  updateAt?: string // 最后更新日期或空
+  words?: number // 正文字数（去除 frontmatter）
   /** 原始分类名（frontmatter category），仅用于派生 categories；未分类文章为 undefined */
   _categoryName?: string
 }
@@ -149,6 +151,19 @@ function slugOf(modulePath: string): string {
   return fileName.replace(/\.md$/, '')
 }
 
+// 字数统计（近似 reading-time 口径）：
+// 中文/全角字符按字计，连续英文/数字按词计。
+function countWords(body: string): number {
+  const text = body
+    .replace(/^---[\s\S]*?---\s*\n?/, '') // 去 frontmatter
+    .replace(/```[\s\S]*?```/g, ' ')      // 代码块算 1 词
+    .replace(/[#>*_`~\-|[\]()!]/g, ' ')   // 去 markdown 符号
+  const cjk = text.match(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g)?.length ?? 0
+  const words = text.replace(/[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/g, ' ')
+    .match(/[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*/g)?.length ?? 0
+  return cjk + words
+}
+
 export const UNCATEGORIZED_ID = 'uncategorized'
 
 // 文章目录：从 frontmatter 读取 title/category/createAt
@@ -157,7 +172,7 @@ export const UNCATEGORIZED_ID = 'uncategorized'
 export const posts: BlogPost[] = Object.keys(rawModules)
   .map((modulePath) => {
     const raw = rawModules[modulePath]
-    const { frontmatter } = parseFrontmatter(raw)
+    const { frontmatter, body } = parseFrontmatter(raw)
     const categoryName = frontmatter.category?.trim()
     return {
       slug: slugOf(modulePath),
@@ -166,6 +181,8 @@ export const posts: BlogPost[] = Object.keys(rawModules)
       // 派生分类所需的原始分类名（未指定的为 undefined → 归未分类）
       _categoryName: categoryName,
       date: frontmatter.createAt || '',
+      updateAt: frontmatter.updateAt || undefined,
+      words: countWords(body),
     }
   })
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''))

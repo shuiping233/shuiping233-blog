@@ -139,16 +139,40 @@ function categoryIdOf(name: string): string {
 }
 
 // Vite 原生支持以原文方式导入全部 md，零依赖。
+// 递归扫描 docs/posts/**（支持子文件夹作为分类），黑名单目录（如 image）跳过。
 // 注意：不能用 as:'raw'（Vite 8/rolldown 报 ParseError），必须 query:'?raw' + import:'default'
-const rawModules = import.meta.glob('../../../docs/posts/*.md', {
+const rawModules = import.meta.glob('../../../docs/posts/**/*.md', {
   eager: true,
   query: '?raw',
   import: 'default',
 }) as Record<string, string>
 
+// 黑名单目录：这些文件夹下的 md 不作为文章/分类（如 image 资源目录）
+const EXCLUDED_DIRS = new Set(['image'])
+
+// md 相对 docs/posts/ 的路径（POSIX），用于分类派生与 slug
+function relPathOf(modulePath: string): string {
+  const marker = '/docs/posts/'
+  const idx = modulePath.indexOf(marker)
+  return (idx >= 0 ? modulePath.slice(idx + marker.length) : modulePath).replace(/\\/g, '/')
+}
+
 function slugOf(modulePath: string): string {
-  const fileName = modulePath.split('/').pop() ?? ''
-  return fileName.replace(/\.md$/, '')
+  return relPathOf(modulePath).replace(/\.md$/, '')
+}
+
+// 文章分类名：
+// 1. frontmatter category 优先（yaml 显式声明则忽略文件夹）
+// 2. 否则取 md 直接所在文件夹名（相对 docs/posts/ 的一级目录）
+// 3. 路径中任意层含黑名单目录（image 等）→ 归未分类
+// 4. 直接在 docs/posts/ 下（无子文件夹）→ 归未分类
+function categoryNameOf(modulePath: string, frontmatterCategory?: string): string | undefined {
+  const yamlCat = frontmatterCategory?.trim()
+  if (yamlCat) return yamlCat
+  const parts = relPathOf(modulePath).split('/')
+  if (parts.some((seg) => EXCLUDED_DIRS.has(seg))) return undefined
+  if (parts.length >= 2) return parts[parts.length - 2]
+  return undefined // 直接在 base 下
 }
 
 // 字数统计（近似 reading-time 口径）：
@@ -173,10 +197,10 @@ export const posts: BlogPost[] = Object.keys(rawModules)
   .map((modulePath) => {
     const raw = rawModules[modulePath]
     const { frontmatter, body } = parseFrontmatter(raw)
-    const categoryName = frontmatter.category?.trim()
+    const categoryName = categoryNameOf(modulePath, frontmatter.category)
     return {
       slug: slugOf(modulePath),
-      title: frontmatter.title || slugOf(modulePath),
+      title: frontmatter.title || slugOf(modulePath).split('/').pop()!,
       category: categoryName ? categoryIdOf(categoryName) : UNCATEGORIZED_ID,
       // 派生分类所需的原始分类名（未指定的为 undefined → 归未分类）
       _categoryName: categoryName,

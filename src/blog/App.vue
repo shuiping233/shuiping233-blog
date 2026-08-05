@@ -78,7 +78,7 @@ const menuItems = computed<NavItem[]>(() => [
     Tag: `cat:${cat.id}`,
     Icon: cat.icon,
     Content: cat.name,
-    SelectsOnInvoked: false, // 分类项点击只展开，不选中
+    // 点击分类项：既展开子文章，也跳转分类列表页（SelectsOnInvoked 默认 true）
     MenuItems: getPostsByCategory(cat.id).map((post) => ({
       Tag: post.slug,
       Content: post.title,

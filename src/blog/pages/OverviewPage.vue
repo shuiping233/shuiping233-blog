@@ -144,9 +144,13 @@ html.dark .overview-stat {
 
 .overview-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 固定 3 列 */
   gap: 12px;
-  margin-bottom: 32px;
+  /* 最多约 6 项（2 行），超出内部滚动 */
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px;
+  margin: -4px 0 32px;
 }
 
 .overview-card {

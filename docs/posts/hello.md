@@ -1,6 +1,5 @@
 ---
 title: 第一篇文章
-category: 随笔
 createAt: 2026-04-02
 updateAt: 2026-08-05
 ---

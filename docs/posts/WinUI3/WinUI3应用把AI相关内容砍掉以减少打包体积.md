@@ -1,11 +1,10 @@
 ---
 title: WinUI3应用把AI相关内容砍掉以减少打包体积
-category: WinUI3
 createAt: 2026-07-18
 updateAt: 2026-08-05
 ---
 
-# Windows App Sdk 强制捆绑AI相关接口, 即使没有用到这部分的库
+## Windows App Sdk 强制捆绑AI相关接口, 即使没有用到这部分的库
 
 我最近做了一个表情包管理器[MemeManager], 想到我这边只windows上用, 于是乎选了[WinUI3]框架来搓, 因为它ui和控件设计风格和动画确实是非常不错的, 但是用过才知道坑也确实不少, Win32 API 和 框架设计让我吃了不少苦头
 

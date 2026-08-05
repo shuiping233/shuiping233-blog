@@ -1,25 +1,9 @@
 {
-  "2026-04-12": {
+  "2026-04-02": {
     "created": [
       {
-        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
-        "path": "/posts/令人恐惧的updater 和 uninstaller"
-      }
-    ]
-  },
-  "2026-04-13": {
-    "updated": [
-      {
-        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
-        "path": "/posts/令人恐惧的updater 和 uninstaller"
-      }
-    ]
-  },
-  "2026-07-18": {
-    "created": [
-      {
-        "title": "WinUI3应用把AI相关内容砍掉以减少打包体积",
-        "path": "/posts/WinUI3应用把AI相关内容砍掉以减少打包体积"
+        "title": "第一篇文章",
+        "path": "/posts/hello"
       }
     ]
   },
@@ -31,15 +15,31 @@
       },
       {
         "title": "WinUI3应用把AI相关内容砍掉以减少打包体积",
-        "path": "/posts/WinUI3应用把AI相关内容砍掉以减少打包体积"
+        "path": "/posts/WinUI3/WinUI3应用把AI相关内容砍掉以减少打包体积"
       }
     ]
   },
-  "2026-04-02": {
+  "2026-04-12": {
     "created": [
       {
-        "title": "第一篇文章",
-        "path": "/posts/hello"
+        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
+        "path": "/posts/随笔/令人恐惧的updater 和 uninstaller"
+      }
+    ]
+  },
+  "2026-04-13": {
+    "updated": [
+      {
+        "title": "为什么6202年了, updater & uninstaller 反而越来令人恐惧?",
+        "path": "/posts/随笔/令人恐惧的updater 和 uninstaller"
+      }
+    ]
+  },
+  "2026-07-18": {
+    "created": [
+      {
+        "title": "WinUI3应用把AI相关内容砍掉以减少打包体积",
+        "path": "/posts/WinUI3/WinUI3应用把AI相关内容砍掉以减少打包体积"
       }
     ]
   }

@@ -91,6 +91,31 @@ body {
   border-radius: 6px;
 }
 
+/* ---- 深色模式：markstream 代码块 ----
+   markstream 的深色变量绑定在 .dark / .markstream-vue.dark 选择器上，
+   而我们的主题类是 html.theme-dark，导致深色下代码块仍用浅色变量（白底）。
+   这里把 markstream 的深色变量在 html.theme-dark 下重绑定。 */
+html.theme-dark .blog-markdown-body .markstream-vue {
+  --ms-background: 0 0% 7%;
+  --ms-foreground: 0 0% 93%;
+  --ms-muted: 0 0% 12%;
+  --ms-muted-foreground: 0 0% 60%;
+  --ms-secondary: 0 0% 16%;
+  --ms-secondary-foreground: 0 0% 93%;
+  --ms-accent: 0 0% 24%;
+  --ms-accent-foreground: 0 0% 93%;
+  --ms-primary: 0 0% 93%;
+  --ms-primary-foreground: 0 0% 10%;
+  --ms-border: 0 0% 20%;
+  --ms-popover: 0 0% 12%;
+  --ms-popover-foreground: 0 0% 93%;
+  --ms-card: 0 0% 10%;
+  --ms-card-foreground: 0 0% 93%;
+  --ms-info: 210 100% 60%;
+  --ms-success: 142 70% 45%;
+  --ms-warning: 38 92% 50%;
+}
+
 html.theme-dark .blog-markdown-body pre {
   --code-bg: rgba(255, 255, 255, 0.08);
 }

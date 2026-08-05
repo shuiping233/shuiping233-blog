@@ -76,11 +76,11 @@ const categoryCards = computed(() =>
 
 const categoryName = (id: string) => categories.find((c) => c.id === id)?.name ?? id
 
-// 最近文章：按日期倒序取前 10 篇
+// 最近文章：按日期倒序取前 6 篇（容器有最大高度，超出内部滚动）
 const recentPosts = computed(() =>
   [...posts]
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
-    .slice(0, 10),
+    .slice(0, 6),
 )
 
 const navigateTo = (slug: string) => {
@@ -97,9 +97,8 @@ const navigateTo = (slug: string) => {
   .overview-root {
     max-width: 880px;
     margin-inline: auto;
-    padding: 40px 48px 0;
+    padding: 40px 48px 48px; /* 底部留白：与 footer 的间距 */
   }
-
   .overview-title {
     margin: 0 0 24px;
     font-size: 32px;
@@ -220,7 +219,11 @@ const navigateTo = (slug: string) => {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-bottom: 48px;
+    /* 最多约 6 项的高度，超出内部滚动，避免撑长页面 */
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 4px;
+    margin: -4px;
   }
 
   .overview-list-item {

@@ -103,9 +103,30 @@ body {
 }
 
 .blog-markdown-body :is(h1, h2, h3, h4, h5, h6) {
-  border-bottom: none;
   margin-top: 24px;
   margin-bottom: 12px;
+}
+
+/* h1/h2 标题下划线（GitHub 风格，与 --- 分隔线效果一致） */
+.blog-markdown-body h1,
+.blog-markdown-body h2 {
+  border-bottom: 1px solid var(--borderColor-muted, #3d444db3);
+  padding-bottom: 0.3em;
+}
+
+/* 无序列表 marker：一级实心圆 / 二级空心圆 / 三级及更深方块
+   颜色用 GitHub 的 fgColor-default（深色下 #f0f6fc 白） */
+.blog-markdown-body ul > li::marker {
+  color: var(--fgColor-default, var(--color-fg-default, #f0f6fc));
+  list-style-type: disc;
+}
+
+.blog-markdown-body ul ul > li::marker {
+  list-style-type: circle;
+}
+
+.blog-markdown-body ul ul ul > li::marker {
+  list-style-type: square;
 }
 
 .blog-markdown-body img {

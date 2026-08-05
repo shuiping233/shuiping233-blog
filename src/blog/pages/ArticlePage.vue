@@ -11,6 +11,7 @@
         custom-id="blog"
         :content="content"
         :custom-markdown-it="customMarkdownIt" />
+      <BlogFooter />
     </article>
   </WinScrollViewer>
 </template>
@@ -22,6 +23,7 @@ import MarkdownRender from 'markstream-vue'
 import type { BlogPost } from '../data/posts'
 import { categories, getPostContent } from '../data/posts'
 import { customMarkdownIt } from '../markdown'
+import BlogFooter from '../components/BlogFooter.vue'
 
 const props = defineProps<{
   post: BlogPost

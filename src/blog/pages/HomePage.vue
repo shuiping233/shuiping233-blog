@@ -6,6 +6,7 @@
         custom-id="blog"
         :content="content"
         :custom-markdown-it="customMarkdownIt" />
+      <BlogFooter />
     </div>
   </WinScrollViewer>
 </template>
@@ -15,6 +16,7 @@ import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
 import MarkdownRender from 'markstream-vue'
 import { homeContent } from '../data/posts'
 import { customMarkdownIt } from '../markdown'
+import BlogFooter from '../components/BlogFooter.vue'
 
 // 首页内容直接渲染 docs/index.md（欢迎语 + 项目列表）
 const content = homeContent

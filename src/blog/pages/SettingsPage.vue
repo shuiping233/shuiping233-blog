@@ -20,6 +20,7 @@
           </WinRadioButtons>
         </WinExpander>
       </div>
+      <BlogFooter />
     </div>
   </WinScrollViewer>
 </template>
@@ -31,6 +32,7 @@ import WinTextBlock from 'winui/components/WinTextBlock.vue'
 import WinExpander from 'winui/components/WinExpander.vue'
 import WinRadioButtons from 'winui/components/WinRadioButtons.vue'
 import WinRadioButton from 'winui/components/WinRadioButton.vue'
+import BlogFooter from '../components/BlogFooter.vue'
 
 type ThemeMode = 'system' | 'light' | 'dark'
 

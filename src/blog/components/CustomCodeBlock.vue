@@ -118,10 +118,8 @@ const highlighted = computed(() => lines.value.map(highlightLine))
     color: var(--code-fg, var(--text-primary, #1b1b1b));
   }
 
-  /* 深色：显式深色(theme-dark) 或 system 深色(dark 类) 都算。
-     特异性(0-2-1)高于默认浅色(0-1-0)，自然覆盖 */
-  html.theme-dark .custom-code-block,
-  html.dark .custom-code-block {
+  /* 固定深色（GitHub dark prettylights 配色） */
+  .custom-code-block {
     --code-bg: #1e1e1e;
     --code-border: rgba(255, 255, 255, 0.12);
     --code-fg: #f0f6fc;
@@ -130,15 +128,6 @@ const highlighted = computed(() => lines.value.map(highlightLine))
     --tok-str: #a5d6ff;
     --tok-com: #9198a1;
     --tok-num: #79c0ff;
-  }
-
-  /* 浅色默认：无类(system 浅色) / theme-light 都走这里（特异性 0-1-0，被上面覆盖） */
-  .custom-code-block {
-    /* GitHub light (prettylights) 配色 */
-    --tok-kw: #cf222e;
-    --tok-str: #0a3069;
-    --tok-com: #59636e;
-    --tok-num: #0550ae;
   }
 
   .code-header {

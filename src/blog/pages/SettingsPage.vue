@@ -5,20 +5,14 @@
 
       <WinTextBlock class="settings-section-title" Text="外观" />
       <div class="settings-controls">
-        <WinExpander
-          Height="70"
-          Header="主题"
-          Description="选择应用颜色模式"
-          HeaderIcon="&#xE790;">
+        <div class="theme-row">
+          <WinTextBlock class="theme-label" Text="主题" />
           <WinRadioButtons
-            :SelectedIndex="themeIndex"
-            MaxColumns="3"
-            @SelectionChanged="onThemeSelectionChanged">
-            <WinRadioButton Content="跟随系统" />
-            <WinRadioButton Content="浅色" />
+            :SelectedIndex="0"
+            MaxColumns="1">
             <WinRadioButton Content="深色" />
           </WinRadioButtons>
-        </WinExpander>
+        </div>
       </div>
       <BlogFooter />
     </div>
@@ -26,29 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, type Ref } from 'vue'
 import WinScrollViewer from 'winui/components/WinScrollViewer.vue'
 import WinTextBlock from 'winui/components/WinTextBlock.vue'
-import WinExpander from 'winui/components/WinExpander.vue'
 import WinRadioButtons from 'winui/components/WinRadioButtons.vue'
 import WinRadioButton from 'winui/components/WinRadioButton.vue'
 import BlogFooter from '../components/BlogFooter.vue'
-
-type ThemeMode = 'system' | 'light' | 'dark'
-
-const themeSetting = inject<Ref<ThemeMode>>('themeSetting')
-
-const themeOptions: ThemeMode[] = ['system', 'light', 'dark']
-
-const themeIndex = computed(() => {
-  const current = themeSetting?.value ?? 'system'
-  return Math.max(0, themeOptions.indexOf(current))
-})
-
-const onThemeSelectionChanged = ({ SelectedIndex }: { SelectedIndex: number }) => {
-  if (!themeSetting) return
-  themeSetting.value = themeOptions[SelectedIndex] ?? 'system'
-}
 </script>
 
 <style scoped>
@@ -80,5 +56,27 @@ const onThemeSelectionChanged = ({ SelectedIndex }: { SelectedIndex: number }) =
     gap: 8px;
     /* 与 footer 的间距 */
     padding-bottom: 48px;
+  }
+
+  .theme-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--card-stroke, rgba(0, 0, 0, 0.08));
+    border-radius: 8px;
+    background: var(--card-bg, rgba(255, 255, 255, 0.5));
+  }
+
+  html.theme-dark .theme-row,
+  html.dark .theme-row {
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --card-stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  .theme-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 </style>

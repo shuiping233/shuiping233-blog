@@ -1,5 +1,5 @@
 <template>
-  <WinTitleBar :title="appTitle" :theme="themeSetting" />
+  <WinTitleBar :title="appTitle" theme="dark" />
   <WinToolTipService />
   <div class="blog-app-content" :class="{ 'has-titlebar': titleBarActive }">
     <WinNavigationView
@@ -57,49 +57,13 @@ import {
 
 const appTitle = 'shuiping233 Blog'
 
-// ---- 主题：与 gallery 相同的机制，html.theme-light / html.theme-dark；system = 不加类，CSS 自动跟随 ----
-type ThemeMode = 'system' | 'light' | 'dark'
-
-const readStoredSetting = <T extends string>(key: string, fallback: T, allowedValues: readonly T[]): T => {
-  const value = localStorage.getItem(key)
-  return (allowedValues as readonly string[]).includes(value ?? '') ? (value as T) : fallback
-}
-
-const themeSetting = ref<ThemeMode>(
-  readStoredSetting<ThemeMode>('winui-theme-setting', 'system', ['system', 'light', 'dark']),
-)
-
-function applyTheme(mode: ThemeMode) {
-  const html = document.documentElement
-  html.classList.remove('theme-light', 'theme-dark', 'dark')
-  if (mode === 'light') html.classList.add('theme-light')
-  else if (mode === 'dark') html.classList.add('theme-dark', 'dark')
-  // system 模式：不加 theme-* 类（WinUI CSS 自动跟随）；markstream 深色单独跟随系统
-  else applyMarkstreamSystemTheme()
-}
-
-// markstream 的深色变量绑在 .dark 类上（.dark .markstream-vue），
-// 而 WinUI 主题用 html.theme-light/theme-dark。为让 markstream 跟随系统深色，
-// 在 system 模式下监听 prefers-color-scheme 同步 dark 类。
-let systemDarkMedia: MediaQueryList | null = null
-function applyMarkstreamSystemTheme() {
-  const html = document.documentElement
-  if (!window.matchMedia) return
-  const apply = () => {
-    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    html.classList.toggle('dark', dark)
-  }
-  systemDarkMedia?.removeEventListener?.('change', apply)
-  systemDarkMedia = window.matchMedia('(prefers-color-scheme: dark)')
-  apply()
-  systemDarkMedia.addEventListener?.('change', apply)
-}
-
-watch(themeSetting, (val) => applyTheme(val), { immediate: true })
-watch(themeSetting, (val) => localStorage.setItem('winui-theme-setting', val), { immediate: true })
-
-// 供 SettingsPage 双向使用
-provide('themeSetting', themeSetting)
+// ---- 主题：固定深色（不做浅色/跟随系统）----
+// 始终给 html 挂 theme-dark + dark 类：
+//   - theme-dark：WinUI 控件深色变量
+//   - dark：markstream / github-markdown-dark.css 深色变量
+const html = document.documentElement
+html.classList.add('theme-dark', 'dark')
+localStorage.setItem('winui-theme-setting', 'dark')
 
 // ---- 标题栏（仅 PWA 窗口控制覆盖时显示）----
 const titleBarActive = ref(false)

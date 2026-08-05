@@ -35,8 +35,8 @@ body,
 
 body {
   font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
-  background: var(--app-bg, #f3f3f3);
-  color: var(--text-primary, #1b1b1b);
+  background: var(--app-bg, #1b1b1b);
+  color: var(--text-primary, #e8e8e8);
 }
 
 /* ---- 文章 markdown 排版（github-markdown-css 容器） ---- */
@@ -93,13 +93,10 @@ body {
   border-radius: 6px;
 }
 
-/* ---- 深色模式：markstream 代码块 ----
-   markstream 的深色变量绑定在 .dark / .markstream-vue.dark 选择器上，
-   而我们的主题类是 html.theme-dark，导致深色下代码块仍用浅色变量（白底）。
+/* ---- markstream 深色变量（固定深色，html 恒挂 theme-dark + dark）----
    注意：markstream-vue 与 blog-markdown-body 是同一元素（Vue class 合并到根 div），
    必须用「同级」选择器（无空格），不能用后代选择器。 */
-html.theme-dark .blog-markdown-body.markstream-vue,
-html.dark .blog-markdown-body.markstream-vue {
+.blog-markdown-body.markstream-vue {
   --ms-background: 0 0% 7%;
   --ms-foreground: 0 0% 93%;
   --ms-muted: 0 0% 12%;
@@ -120,31 +117,22 @@ html.dark .blog-markdown-body.markstream-vue {
   --ms-warning: 38 92% 50%;
 }
 
-html.theme-dark .blog-markdown-body pre,
-html.dark .blog-markdown-body pre {
+.blog-markdown-body pre {
   --code-bg: rgba(255, 255, 255, 0.08);
 }
 
 .blog-markdown-body blockquote {
-  color: var(--text-secondary, #6b6b6b);
+  color: var(--text-secondary, #9198a1);
 }
 
-/* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights ----
-   github-markdown.css 默认是浅色背景(#818b981f)，暗色下偏淡看不清，
-   这里按 GitHub light/dark 值显式覆盖。 */
+/* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights dark ---- */
 .blog-markdown-body :not(pre) > code {
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 85%;
   white-space: break-spaces;
-  background-color: #818b981f;
+  background-color: #656c7633;
   border-radius: 6px;
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-  color: inherit;
-}
-
-html.theme-dark .blog-markdown-body :not(pre) > code,
-html.dark .blog-markdown-body :not(pre) > code {
-  background-color: #656c7633;
   color: #f0f6fc;
 }

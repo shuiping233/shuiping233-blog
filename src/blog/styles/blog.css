@@ -181,14 +181,27 @@ body {
   display: none;
 }
 
-/* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights dark ---- */
+/* ---- 行内代码（`xx`）样式，对齐 GitHub prettylights dark ----
+   字号与正文一致（不缩小，保证可读性）。 */
 .blog-markdown-body :not(pre) > code {
   padding: 0.2em 0.4em;
   margin: 0;
-  font-size: 85%;
+  font-size: 100%; /* 与正文同号（GitHub 默认 85% 会缩小，这里恢复） */
   white-space: break-spaces;
   background-color: #656c7633;
   border-radius: 6px;
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
   color: #f0f6fc;
+}
+
+/* ---- 链接样式：蓝色 + 下划线（GitHub dark 风格）---- */
+.blog-markdown-body a {
+  color: #4493f8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blog-markdown-body a:hover {
+  color: #79c0ff;
+  text-decoration: underline;
 }

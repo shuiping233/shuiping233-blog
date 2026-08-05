@@ -85,9 +85,9 @@ const content = computed(() => getPostContent(props.post.slug))
     min-width: 0;
   }
 
-  .article-rich :deep(p),
-  .article-rich :deep(a) {
+  .article-rich :deep(p) {
     margin: 0;
-    color: inherit;
   }
+
+  /* 链接样式由 blog.css 的 .blog-markdown-body a 统一处理（蓝色+下划线） */
 </style>

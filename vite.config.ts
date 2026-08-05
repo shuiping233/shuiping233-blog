@@ -1,12 +1,52 @@
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, type Plugin, type Connect } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { cpSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createReadStream, cpSync, existsSync, statSync } from 'node:fs';
+import { extname, resolve } from 'node:path';
 
-// 精确复制内容资产：docs/posts/image（文章图片/视频）→ dist/posts/image，
-// docs/public（favicon/beian/posts.json）→ dist/public。
-// 并为 History 路由生成 404.html（= index.html，作为 nginx try_files 之外的兜底）。
-// build 时关闭 publicDir 全量复制（copyPublicDir: false），避免把 .md 源文件也复制进产物。
+const MIME: Record<string, string> = {
+  '.webp': 'image/webp',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.mp4': 'video/mp4',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.json': 'application/json',
+  '.ttf': 'font/ttf',
+};
+
+// dev 模式：把内容资产（docs/posts/image、docs/public）以中间件方式 serve，
+// 使 /posts/image/...、/public/... 可访问。不设 publicDir 指向 docs——
+// 否则 docs 下的 .md 会变成 public 资产，无法从 JS import（import.meta.glob 会报错）。
+function serveContentAssets(): Plugin {
+  return {
+    name: 'serve-content-assets',
+    apply: 'serve',
+    configureServer(server) {
+      const middleware: Connect.NextHandleFunction = (req, res, next) => {
+        const url = (req.url ?? '').split('?')[0];
+        let filePath: string | null = null;
+        if (url.startsWith('/posts/image/')) {
+          filePath = resolve(__dirname, 'docs', url.slice(1));
+        } else if (url.startsWith('/public/')) {
+          filePath = resolve(__dirname, 'docs', url.slice(1));
+        }
+        if (filePath && existsSync(filePath) && statSync(filePath).isFile()) {
+          const mime = MIME[extname(filePath).toLowerCase()] ?? 'application/octet-stream';
+          res.setHeader('Content-Type', mime);
+          createReadStream(filePath).pipe(res);
+          return;
+        }
+        next();
+      };
+      server.middlewares.use(middleware);
+    },
+  };
+}
+
+// 构建产物：精确复制内容资产 docs/posts/image → dist/posts/image、
+// docs/public → dist/public，并生成 404.html（History 路由兜底）。
 function copyContentAssets(): Plugin {
   return {
     name: 'copy-content-assets',
@@ -23,7 +63,6 @@ function copyContentAssets(): Plugin {
         resolve(__dirname, 'docs/public'),
         resolve(__dirname, 'dist/public'),
       );
-      // History 路由兜底：直接访问 /posts/xxx 时若服务器未配 try_files，返回该页
       const indexHtml = resolve(__dirname, 'dist/index.html');
       if (existsSync(indexHtml)) {
         cpSync(indexHtml, resolve(__dirname, 'dist/404.html'));
@@ -34,10 +73,7 @@ function copyContentAssets(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), copyContentAssets()],
-  // dev 时 docs 作为静态资源根（/posts/image/...、/public/... 可访问）；
-  // build 时 copyPublicDir=false，产物只含插件复制的内容资产，不含 .md 源码
-  publicDir: 'docs',
+  plugins: [vue(), serveContentAssets(), copyContentAssets()],
   resolve: {
     alias: {
       // WinUIonWeb 控件库（submodule）源码根，抹平 仓库根/WinUIonWeb/src 三层嵌套
@@ -50,6 +86,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    copyPublicDir: false,
   },
 });

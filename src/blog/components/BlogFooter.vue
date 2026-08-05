@@ -1,3 +1,8 @@
+<script setup lang="ts">
+// beian.png 是构建时由 vite 插件复制到 dist/public/ 的静态资源，非模块导入
+const beianUrl = `${import.meta.env.BASE_URL}public/beian.png`
+</script>
+
 <template>
   <footer class="blog-footer">
     <p class="footer-message">
@@ -19,7 +24,7 @@
         target="_blank"
         rel="noopener noreferrer"
         class="beian-link police-beian">
-        <img src="/public/beian.png" alt="公安备案" class="beian-icon" />
+        <img :src="beianUrl" alt="公安备案" class="beian-icon" />
         粤公网安备44060402003189号
       </a>
     </div>

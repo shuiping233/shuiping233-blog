@@ -1,5 +1,4 @@
 <template>
-  <WinTitleBar :title="appTitle" theme="dark" />
   <WinToolTipService />
   <!-- 404 提示：访问不存在的路径时（服务器 SPA 兜底），弹框告知并引导回首页 -->
   <WinContentDialog
@@ -10,7 +9,7 @@
     @PrimaryButtonClick="onNotFoundConfirm">
     <WinTextBlock :Text="`找不到路径 ${notFoundPath} 的内容`" TextWrapping="WrapWholeWords" />
   </WinContentDialog>
-  <div class="blog-app-content" :class="{ 'has-titlebar': titleBarActive }">
+  <div class="blog-app-content">
     <WinNavigationView :SelectedItem="selectedItem" PaneDisplayMode="Auto" :MenuItems="menuItems"
       :FooterMenuItems="footerMenuItems" :IsSettingsVisible="false" IsBackButtonVisible="Collapsed"
       @ItemInvoked="onItemInvoked">
@@ -37,7 +36,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, provide, defineAsyncComponent } from 'vue'
-import WinTitleBar from 'winui/components/WinTitleBar.vue'
 import WinToolTipService from 'winui/components/WinToolTipService.vue'
 import WinNavigationView from 'winui/components/WinNavigationView.vue'
 import WinAutoSuggestBox from 'winui/components/WinAutoSuggestBox.vue'
@@ -60,8 +58,6 @@ import {
   allPostTitles,
 } from './data/posts'
 
-const appTitle = 'shuiping233 Blog'
-
 // ---- 主题：固定深色（不做浅色/跟随系统）----
 // 始终给 html 挂 theme-dark + dark 类：
 //   - theme-dark：WinUI 控件深色变量
@@ -70,9 +66,6 @@ const html = document.documentElement
 html.classList.add('theme-dark', 'dark')
 localStorage.setItem('winui-theme-setting', 'dark')
 
-// ---- 标题栏（仅 PWA 窗口控制覆盖时显示）----
-const titleBarActive = ref(false)
-provide('winTitleBarVisible', titleBarActive)
 
 interface NavItem {
   Tag: string
@@ -264,12 +257,6 @@ const onQuerySubmitted = ({
   height: 100%;
   min-width: 0;
   min-height: 0;
-}
-
-.blog-app-content.has-titlebar {
-  --blog-titlebar-height: var(--win-titlebar-height, env(titlebar-area-height, 32px));
-  height: calc(100% - var(--blog-titlebar-height));
-  margin-top: var(--blog-titlebar-height);
 }
 
 .blog-page {

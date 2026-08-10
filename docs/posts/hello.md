@@ -93,6 +93,10 @@ todo checkbox:
 
 视频(html):
 
+```html
+<video src="./image/hello/1776083876658.mp4" controls width="100%"></video>
+```
+
 <video src="./image/hello/1776083876658.mp4" controls width="100%"></video>
 
 文本容器:

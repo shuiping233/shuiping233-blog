@@ -12,6 +12,7 @@ import CustomCodeBlock from './CustomCodeBlock.vue'
 import CustomMediaPlayer from './CustomMediaPlayer.vue'
 import CustomContainerRouter from './CustomContainerRouter.vue'
 import CustomLink from './CustomLink.vue'
+import CustomCheckbox from './CustomCheckbox.vue'
 
 // 模块顶层注册（与渲染同模块实例）。setCustomComponents 是【覆盖】非【合并】，
 // 必须一次传全部键；且每次 MarkdownRender 挂载前重新注册，确保注册表最新。
@@ -22,6 +23,8 @@ const registerCustomComponents = () => {
     html_inline: CustomMediaPlayer,
     vmr_container: CustomContainerRouter,
     link: CustomLink,
+    checkbox_input: CustomCheckbox,
+    checkbox: CustomCheckbox,
   })
 }
 registerCustomComponents()

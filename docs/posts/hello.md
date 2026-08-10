@@ -60,11 +60,12 @@ gif图片:
 
 表格:
 
-| 列1 | 列2 | 列3 |
-| --- | --- | --- |
-| 1   | 2   | 3   |
-| 4   | 5   | 6   |
-| 7   | 8   | 9   |
+| 列1(默认) | 列2(居左) | 列3(居右) | 列4(居中) |
+| --------- | :-------- | --------: | :-------: |
+| 1         | 2         |         3 |     4     |
+| 5         | 6         |         7 |     8     |
+| 9         | 10        |        11 |    12     |
+| 13        | 14        |        15 |    16     |
 
 无序列表:
 
@@ -123,19 +124,16 @@ todo checkbox:
 
 > [!WARNING] GitHub 风格的 Alerts
 > 123
+> [!INFO]
+> 这是一个信息提示框。
+> [!WARNING]
+> 这是一个警告提示框。
 ```
 
 ::: info
 信息提示
-
-dsadasdsa
-
-a
-da
-das
-dsda
-as
-da
+dsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsa
+中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文
 das
 das
 :::

@@ -14,6 +14,8 @@ updateAt: 2026-08-10
 
 **粗体**、_斜体_、~~删除线~~、==高亮==、`行内代码`
 
+---
+
 # 一级标题
 
 ## 二级标题
@@ -94,7 +96,7 @@ todo checkbox:
 
 文本容器:
 
-```
+```markdown
 ::: info
 信息提示
 :::
@@ -160,6 +162,10 @@ das
 
 > [!WARNING] GitHub 风格的 Alerts
 > 123
+> [!INFO]
+> 这是一个信息提示框。
+> [!WARNING]
+> 这是一个警告提示框。
 
 markdown emoji:
 

@@ -1,8 +1,8 @@
 /* 博客全局样式：WinUIonWeb 图标字体 + 布局微调 */
 
 @font-face {
-  font-family: 'WinUIOnWebIcons';
-  src: url('winui/assets/Fonts/SEGOEICONS.TTF') format('truetype');
+  font-family: "WinUIOnWebIcons";
+  src: url("winui/assets/Fonts/SEGOEICONS.TTF") format("truetype");
   font-display: swap; /* 文本先显示, 图标字体加载后替换(Lighthouse 建议) */
 }
 
@@ -41,7 +41,7 @@ body .icon-glyph,
 body .icon-preview-glyph,
 body .group-icon,
 body .tree-icon {
-  font-family: 'WinUIOnWebIcons';
+  font-family: "WinUIOnWebIcons";
 }
 
 html,
@@ -55,7 +55,7 @@ body,
 }
 
 body {
-  font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
   background: var(--app-bg, #1b1b1b);
   color: var(--text-primary, #e8e8e8);
 }
@@ -67,6 +67,21 @@ body {
   font-size: 15px;
   line-height: 1.75;
   max-width: none;
+}
+
+/* ---- ==高亮==（markdown-it-mark → .highlight-node）样式 ----
+   参照文章页分类胶囊 .article-category：
+   - font-size 不设置，保留 markdown 渲染的原字号
+   - 圆角用 0.2em（相对字号），不用固定 10px */
+.blog-markdown-body.markdown-body .highlight-node {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.001em 0.4em;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--accent-aa-text);
+  background: var(--accent-aa-fill);
+  border-radius: 6px;
 }
 
 /* ---- sticky footer：内容不足一屏时贴底，超长时随内容滚动 ----
@@ -201,7 +216,9 @@ body {
    注意：WinInfoBar 给 span 内联了 line-height:16px，需 !important 覆盖。
    blog.css 是全局 CSS，不能用 :deep()（Vue scoped 伪类，浏览器忽略），
    直接写普通后代选择器。 */
-.win-infobar.no-banner-content .win-infobar-standard-icon-area .win-infobar-standard-icon {
+.win-infobar.no-banner-content
+  .win-infobar-standard-icon-area
+  .win-infobar-standard-icon {
   line-height: 35px !important;
 }
 
@@ -222,7 +239,14 @@ body {
   white-space: break-spaces;
   background-color: #656c7633;
   border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    SF Mono,
+    Menlo,
+    Consolas,
+    Liberation Mono,
+    monospace;
   color: #f0f6fc;
 }
 
